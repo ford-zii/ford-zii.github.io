@@ -55,12 +55,13 @@ body {
       border-color: #f4511e;
 
   }
+
   .crop-height {
   /* max-width: 1200px; /* img src width (if known) */
 
     cursor: pointer;
     height: 800px;
-    width: auto;
+    width: 100%;
     margin: 0 auto;
     overflow: hidden;
     border-radius: 0px;
@@ -70,19 +71,10 @@ body {
   .crop-height img {
   position: relative;
   top: 50%;
+  max-width: auto;
   transform: translateY(-50%);
 }
 
-img.scale {
-  /* corrects inline gap in enclosing div */
-  display: block;
-  max-width: 100%;
-  /* just in case, to force correct aspect ratio */
-  height: auto !important;
-  width: auto\9; /* ie8+9 */
-  /* lt ie8 */
-  -ms-interpolation-mode: bicubic;
-}
   .carousel-indicators li.active {
       background-color: #f4511e;
   }
@@ -95,23 +87,7 @@ img.scale {
      display: none; /* Hide the carousel text when the screen is less than 600 pixels wide */
    }
  }
- .flip {
-  -webkit-transform: rotate(180deg);
-  -moz-transform:    rotate(180deg);
-  -ms-transform:     rotate(180deg);
-  -o-transform:      rotate(180deg);
-  transform:         rotate(180deg);
-  /* needed? not sure */
-  zoom: 50;
-}
 
-img.flip {
-  /* if native or declared width of img.scale
-     is less than div.crop-height, this will
-     flipped img left */
-  float: right;
-  /* add clearfix if needed */
-}
   .item h4 {
       font-size: 19px;
       line-height: 1.375em;
