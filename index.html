@@ -174,6 +174,65 @@ html[lang="en"] #lang [data-on="en"], html[lang="th"] #lang [data-on="th"] { opa
   font: 700 .7rem/1 var(--f-display); letter-spacing: .06em; color: var(--lantern); border: 1.5px solid currentColor;
 }
 
+/* Level history */
+.timeline { list-style: none; margin: 0; padding: 0 0 0 18px; border-left: 2px solid var(--line); display: grid; gap: 14px; }
+.timeline li { position: relative; display: grid; gap: 2px; }
+.timeline li::before { content: ""; position: absolute; left: -25px; top: .45em; width: 10px; height: 10px; background: var(--night); border: 2px solid var(--leaf); transform: rotate(45deg); }
+.timeline li.now::before { background: var(--sap); border-color: var(--sap); box-shadow: 0 0 12px var(--sap); }
+.timeline time { font: 600 .78rem/1.2 var(--f-display); color: var(--dim); font-variant-numeric: tabular-nums; }
+.timeline b { font-family: var(--f-display); font-weight: 600; }
+.timeline span { color: var(--dim); font-size: .9rem; }
+/* Boss battles */
+.bosses { display: grid; gap: 8px; }
+.boss details { border: 1px solid var(--line); background: color-mix(in oklab, var(--moss) 80%, transparent); clip-path: var(--notch); }
+.boss summary { list-style: none; cursor: pointer; padding: 12px 14px; display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; }
+.boss summary::-webkit-details-marker { display: none; }
+.boss summary:hover { background: color-mix(in oklab, var(--lantern) 8%, transparent); }
+.bname { font: 600 1rem/1.25 var(--f-display); }
+.state { grid-column: 2; grid-row: 1; justify-self: end; font: 700 .72rem/1 var(--f-display); color: var(--lantern); border: 1.5px solid currentColor; padding: 3px 6px; transform: rotate(-3deg); }
+.hp { grid-column: 1 / -1; height: 5px; background: color-mix(in oklab, var(--line) 70%, transparent); overflow: hidden; }
+.hp i { display: block; height: 100%; background: var(--lantern); transform-origin: left; transform: scaleX(0); }
+.boss details[open] .hp i { animation: drain 700ms var(--ease-out); }
+.boss details[open] .state { animation: stamp 260ms cubic-bezier(.34, 1.56, .64, 1) 520ms backwards; }
+@keyframes drain { from { transform: scaleX(1); } }
+@keyframes stamp { from { transform: rotate(-3deg) scale(1.6); opacity: 0; } }
+.boss dl { margin: 0; padding: 0 14px 14px; display: grid; grid-template-columns: max-content 1fr; gap: 6px 14px; font-size: .9rem; }
+.boss dt { color: var(--dim); font-family: var(--f-display); }
+.boss dd { margin: 0; min-width: 0; }
+.boss dd:last-of-type { color: var(--sap); }
+.boss.sealed .bname { color: var(--dim); }
+code { font-size: .88em; color: var(--leaf); overflow-wrap: anywhere; }
+/* Achievements */
+.badges { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 180px), 1fr)); gap: 8px; }
+.badges li { display: grid; grid-template-columns: 28px 1fr; gap: 2px 10px; padding: 10px 12px; border: 1px solid var(--line); background: color-mix(in oklab, var(--moss) 80%, transparent); }
+.badges i { grid-row: span 2; width: 22px; height: 22px; margin-top: 2px; background: var(--c); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); box-shadow: 0 0 12px var(--c); }
+.badges b { font: 600 .9rem/1.2 var(--f-display); }
+.badges span { color: var(--dim); font-size: .8rem; line-height: 1.4; }
+.badges .locked { border-style: dashed; }
+.badges .locked i { background: var(--line); }
+.badges .locked b { color: var(--dim); }
+#explorer:not(.locked) { animation: unlock 600ms var(--ease-out); border-color: var(--sap); }
+@keyframes unlock { 0% { transform: scale(.96); } 40% { transform: scale(1.03); } }
+/* Battle cries */
+.cries { display: grid; gap: 10px; }
+.cries li { display: grid; gap: 2px; padding-left: 12px; border-left: 2px solid var(--sap); }
+.cries q { font: 600 1rem/1.4 var(--f-display); quotes: "“" "”"; }
+.cries span { color: var(--dim); font-size: .85rem; }
+/* Toast */
+.toast {
+  position: fixed; z-index: 6; left: 50%; top: calc(80px + env(safe-area-inset-top, 0px)); transform: translateX(-50%);
+  display: flex; gap: 12px; align-items: center; padding: 10px 16px 10px 12px;
+  background: var(--moss); border: 1px solid var(--sap); clip-path: var(--notch);
+  animation: toast-in 420ms cubic-bezier(.34, 1.56, .64, 1);
+}
+.toast.out { animation: toast-out 300ms cubic-bezier(.55, 0, 1, .45) forwards; }
+.toast[hidden] { display: none; }
+.toast i { width: 28px; height: 28px; background: var(--sap); clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%); }
+.toast small { display: block; color: var(--dim); font-size: .74rem; }
+.toast b { font-family: var(--f-display); }
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, -14px) scale(.96); } }
+@keyframes toast-out { to { opacity: 0; transform: translate(-50%, -10px); } }
+
 /* ---------- Game mode (JS on) ---------- */
 body.game { height: 100dvh; overflow: hidden; }
 body.game .deck {
@@ -266,9 +325,11 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
     <button data-go="0"><span class="k">1</span><span data-l="en">Start</span><span data-l="th">เริ่ม</span></button>
     <button data-go="1"><span class="k">2</span><span data-l="en">Player</span><span data-l="th">ผู้เล่น</span></button>
     <button data-go="2"><span class="k">3</span><span data-l="en">Skills</span><span data-l="th">สกิล</span></button>
-    <button data-go="3"><span class="k">4</span><span data-l="en">Quests</span><span data-l="th">เควสต์</span></button>
-    <button data-go="4"><span class="k">5</span><span data-l="en">Party</span><span data-l="th">ปาร์ตี้</span></button>
-    <button data-go="5"><span class="k">6</span><span data-l="en">Save</span><span data-l="th">เซฟ</span></button>
+    <button data-go="3"><span class="k">4</span><span data-l="en">History</span><span data-l="th">เส้นทาง</span></button>
+    <button data-go="4"><span class="k">5</span><span data-l="en">Bosses</span><span data-l="th">บอส</span></button>
+    <button data-go="5"><span class="k">6</span><span data-l="en">Quests</span><span data-l="th">เควสต์</span></button>
+    <button data-go="6"><span class="k">7</span><span data-l="en">Party</span><span data-l="th">ปาร์ตี้</span></button>
+    <button data-go="7"><span class="k">8</span><span data-l="en">Save</span><span data-l="th">เซฟ</span></button>
   </nav>
   <div class="tools">
     <button class="btn ghost lang" id="lang" type="button" aria-label="Switch language / เปลี่ยนภาษา"><span data-on="en">EN</span><span data-on="th">ไทย</span></button>
@@ -292,9 +353,9 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
         <p data-l="en">Character sheet, counted from my Oracle's memory as of October 2026.</p>
         <p data-l="th">ค่าสถานะตัวละคร นับจากความจำของ Oracle ณ ตุลาคม 2026</p></header>
       <div class="stats">
-        <div><b class="num">172</b><span data-l="en">lessons written down after real bugs and reviews</span><span data-l="th">บทเรียนที่จดไว้หลังเจอบั๊กและรีวิวจริง</span></div>
-        <div><b class="num">578</b><span data-l="en">work sessions with a written retrospective</span><span data-l="th">session ทำงานที่มี retrospective เขียนไว้</span></div>
-        <div><b class="num">50</b><span data-l="en">tasks handed to agents with a brief and evidence check</span><span data-l="th">งานที่ส่งให้ agent พร้อม brief และการตรวจหลักฐาน</span></div>
+        <div><b class="num">173</b><span data-l="en">lessons written down after real bugs and reviews</span><span data-l="th">บทเรียนที่จดไว้หลังเจอบั๊กและรีวิวจริง</span></div>
+        <div><b class="num">580</b><span data-l="en">work sessions with a written retrospective</span><span data-l="th">session ทำงานที่มี retrospective เขียนไว้</span></div>
+        <div><b class="num">224</b><span data-l="en">handoffs so the next session picks up where the last one stopped</span><span data-l="th">handoff ส่งต่องานให้ session ถัดไปทำต่อได้ทันที</span></div>
         <div><b class="num">7</b><span data-l="en">agents in the party, each with its own role</span><span data-l="th">agents ในปาร์ตี้ แต่ละตัวมีหน้าที่ของตัวเอง</span></div>
       </div>
       <dl class="kv">
@@ -304,6 +365,25 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
         <dt><span data-l="en">Region</span><span data-l="th">ภูมิภาค</span></dt><dd><span data-l="en">Thailand</span><span data-l="th">ประเทศไทย</span></dd>
         <dt><span data-l="en">Languages</span><span data-l="th">ภาษา</span></dt><dd><span data-l="en">Thai, English</span><span data-l="th">ไทย อังกฤษ</span></dd>
       </dl>
+      <h3><span data-l="en">Achievements</span><span data-l="th">ความสำเร็จ</span></h3>
+      <ul class="badges">
+        <li style="--c:#a99bff"><i></i><b><span data-l="en">Memory palace</span><span data-l="th">วังแห่งความจำ</span></b><span data-l="en">173 lessons, 580 retros and 224 handoffs in three months.</span><span data-l="th">บทเรียน 173, retro 580 และ handoff 224 ภายในสามเดือน</span></li>
+        <li style="--c:#8cc49a"><i></i><b><span data-l="en">Green wall</span><span data-l="th">กำแพงสีเขียว</span></b><span data-l="en">4,068 backend and 1,066 frontend tests passing at a single ERP merge.</span><span data-l="th">เทสต์ backend 4,068 และ frontend 1,066 ผ่านหมดใน merge เดียวของ ERP</span></li>
+        <li style="--c:#f2b544"><i></i><b><span data-l="en">Speedrun upgrade</span><span data-l="th">อัปเกรดแบบสปีดรัน</span></b><span data-l="en">Python, Django and Celery upgraded to current LTS in one day.</span><span data-l="th">อัปเกรด Python, Django และ Celery เป็น LTS ล่าสุดในวันเดียว</span></li>
+        <li style="--c:#7fd6ff"><i></i><b><span data-l="en">Sprint chain</span><span data-l="th">สปรินต์ต่อเนื่อง</span></b><span data-l="en">Five ERP sprints led in about a week.</span><span data-l="th">นำ ERP 5 สปรินต์ในราวหนึ่งสัปดาห์</span></li>
+        <li style="--c:#ff7a8a"><i></i><b><span data-l="en">Balanced books</span><span data-l="th">บัญชีลงตัว</span></b><span data-l="en">Real-data import rehearsal: 12 of 12 money totals matched.</span><span data-l="th">ซ้อมย้ายข้อมูลจริง ยอดเงินตรงกัน 12 จาก 12</span></li>
+        <li style="--c:#8cc49a"><i></i><b><span data-l="en">Test grower</span><span data-l="th">ปลูกเทสต์</span></b><span data-l="en">515 to 732 tests in one phase of ห้องสื่อ Studio.</span><span data-l="th">เทสต์จาก 515 เป็น 732 ในเฟสเดียวของห้องสื่อ Studio</span></li>
+        <li style="--c:#a99bff"><i></i><b><span data-l="en">Toolsmith</span><span data-l="th">ช่างตีเครื่องมือ</span></b><span data-l="en">207 of 207 MCP tools passing across 17 agent configs.</span><span data-l="th">MCP tools ผ่าน 207 จาก 207 ใน config ของ agent 17 ชุด</span></li>
+        <li class="locked" id="explorer" style="--c:#f2b544"><i></i><b><span data-l="en">Explorer</span><span data-l="th">นักสำรวจ</span></b><span data-l="en">Yours to unlock: visit every zone of this page.</span><span data-l="th">ของคุณ ปลดล็อกได้ด้วยการเดินครบทุกโซนของหน้านี้</span></li>
+      </ul>
+      <h3><span data-l="en">Battle cries</span><span data-l="th">คำพูดติดปาก</span></h3>
+      <ul class="cries">
+        <li><q lang="th">ลงมือ จวดๆ</q><span data-l="en">Go. Fast.</span></li>
+        <li><q lang="th">รอก่อน ระวังอย่าให้ทำอะไรกับ DB production</q><span data-l="en">Wait. Nothing touches the production DB.</span></li>
+        <li><q lang="th">ทุก script ผ่าน flow ของระบบถูกต้องมั้ย หรือลงข้อมูลเอง</q><span data-l="en">Does every script go through the system's real flow, or is it writing data by hand?</span></li>
+        <li><q>try one</q><span data-l="en">Pilot one record before the batch.</span><span data-l="th">ลอง 1 record ก่อนรันทั้งชุด</span></li>
+        <li><q lang="th">เขียน retro เก็บเคสนี้ไว้ด้วย</q><span data-l="en">Write a retro so we keep this case.</span></li>
+      </ul>
       <h3><span data-l="en">Passive abilities</span><span data-l="th">สกิลติดตัว</span></h3>
       <ul class="passives">
         <li><span data-l="en">A test only counts after I've seen it fail.</span><span data-l="th">เทสต์จะนับก็ต่อเมื่อเคยเห็นมันแดงมาก่อน</span></li>
@@ -318,8 +398,8 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
 
     <section class="panel" id="skills" data-zone="2">
       <header><h2><span data-l="en">Skill tree</span><span data-l="th">ต้นไม้สกิล</span></h2>
-        <p data-l="en">I didn't rate myself. Each bar shows how many of my 172 written lessons involve that tool, so the long ones are where I've done the most hard work.</p>
-        <p data-l="th">ผมไม่ได้ให้คะแนนตัวเอง แต่ละแถบคือจำนวนบทเรียน (จาก 172 บท) ที่เกี่ยวกับเครื่องมือนั้น แถบยาวคือที่ที่ผมลงแรงหนักที่สุด</p></header>
+        <p data-l="en">I didn't rate myself. Each bar shows how many of my written lessons involve that tool, so the long ones are where I've done the most hard work.</p>
+        <p data-l="th">ผมไม่ได้ให้คะแนนตัวเอง แต่ละแถบคือจำนวนบทเรียนที่เกี่ยวกับเครื่องมือนั้น แถบยาวคือที่ที่ผมลงแรงหนักที่สุด</p></header>
       <div class="branch" style="--c:#f2b544">
         <h3><i></i>Commerce &amp; ERP</h3>
         <ul>
@@ -376,7 +456,124 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
       <p class="footnote" data-l="th">Jacob (Oracle ของผม) นับไว้เมื่อ 20 ต.ค. 2026 แถบเส้นประคือใช้อยู่แต่ยังไม่มีในบันทึกบทเรียน ส่วน Three.js ได้ +1 จากหน้านี้</p>
     </section>
 
-    <section class="panel" id="quests" data-zone="3">
+    <section class="panel" id="log" data-zone="3">
+      <header><h2><span data-l="en">Level history</span><span data-l="th">เส้นทางเลเวล</span></h2>
+        <p data-l="en">One rung per milestone. Most of the climb happened after the party formed in July 2026.</p>
+        <p data-l="th">หนึ่งขั้นบันไดต่อหนึ่ง milestone ส่วนใหญ่ไต่ขึ้นมาหลังจากตั้งปาร์ตี้เมื่อกรกฎาคม 2026</p></header>
+      <ol class="timeline">
+        <li><time><span data-l="en">Origin</span><span data-l="th">จุดเริ่ม</span></time><b><span data-l="en">Software Engineering, University of Phayao</span><span data-l="th">วิศวกรรมซอฟต์แวร์ มหาวิทยาลัยพะเยา</span></b></li>
+        <li><time>2018</time><b><span data-l="en">First personal site, Ford'Zii</span><span data-l="th">เว็บส่วนตัวเว็บแรก Ford'Zii</span></b><span data-l="en">Still saved under /2018.</span><span data-l="th">ยังเก็บไว้ที่ /2018</span></li>
+        <li><time><span data-l="en">Joined</span><span data-l="th">เข้ากิลด์</span></time><b>Opendurian</b><span data-l="en">Order, billing and finance systems for a commerce business.</span><span data-l="th">ระบบออเดอร์ บิล และการเงินของธุรกิจคอมเมิร์ซ</span></li>
+        <li><time>2026-07-20</time><b><span data-l="en">Jacob Oracle awakens</span><span data-l="th">Jacob Oracle ตื่นขึ้น</span></b><span data-l="en">An external brain that writes down every session.</span><span data-l="th">สมองภายนอกที่จดทุก session</span></li>
+        <li><time>2026-07-22</time><b><span data-l="en">Iris is born</span><span data-l="th">Iris ถือกำเนิด</span></b><span data-l="en">A dev companion that moves between repos.</span><span data-l="th">คู่หู dev ที่ย้าย repo ไปด้วยกัน</span></li>
+        <li><time>2026-07-27</time><b><span data-l="en">Jacob becomes PM</span><span data-l="th">Jacob รับตำแหน่ง PM</span></b><span data-l="en">Runs the queue for a three-agent dev squad.</span><span data-l="th">ดูแลคิวงานของทีม dev ที่มี agent 3 ตัว</span></li>
+        <li><time>2026-08</time><b><span data-l="en">Reina joins</span><span data-l="th">Reina เข้าปาร์ตี้</span></b><span data-l="en">Ops watch on a Hermes gateway, around the clock.</span><span data-l="th">เฝ้า ops บน Hermes gateway ตลอด 24 ชม.</span></li>
+        <li><time>2026-09-14</time><b><span data-l="en">Document engine shipped</span><span data-l="th">ส่ง document engine</span></b><span data-l="en">21 commits, tagged and deployed.</span><span data-l="th">21 commits ติด tag และ deploy แล้ว</span></li>
+        <li><time>2026-09</time><b><span data-l="en">Five ERP sprints in about a week</span><span data-l="th">ERP 5 สปรินต์ในราวหนึ่งสัปดาห์</span></b><span data-l="en">Plus four schema phases for an in-house ERP.</span><span data-l="th">พร้อม schema อีก 4 เฟส สำหรับ ERP ภายใน</span></li>
+        <li><time>2026-10-08</time><b><span data-l="en">One-day stack upgrade</span><span data-l="th">อัปเกรด stack ในวันเดียว</span></b><span data-l="en">Python 3.12, Django 5.2 LTS, Celery 5.5, and a risky endpoint removed.</span><span data-l="th">Python 3.12, Django 5.2 LTS, Celery 5.5 และปิด endpoint ที่เสี่ยง</span></li>
+        <li><time>2026-10-09</time><b><span data-l="en">ห้องสื่อ Studio begins</span><span data-l="th">เริ่มสร้างห้องสื่อ Studio</span></b></li>
+        <li><time>2026-10-19</time><b><span data-l="en">The fleet moves to Herdr</span><span data-l="th">ย้ายทั้งฝูง agent ไปอยู่บน Herdr</span></b><span data-l="en">First verified run of the task workflow with two Codex workers.</span><span data-l="th">รัน task workflow จริงครั้งแรกกับ Codex 2 ตัว ผ่านการตรวจ</span></li>
+        <li class="now"><time><span data-l="en">Now</span><span data-l="th">ตอนนี้</span></time><b>Senior Software Engineer</b><span data-l="en">And this page, built with the party.</span><span data-l="th">และหน้านี้ ที่สร้างร่วมกับปาร์ตี้</span></li>
+      </ol>
+    </section>
+
+    <section class="panel" id="bosses" data-zone="4">
+      <header><h2><span data-l="en">Boss battles</span><span data-l="th">บอสที่ปราบแล้ว</span></h2>
+        <p data-l="en">Real production fights. Open a card to see how the root cause was found. Company specifics stay sealed.</p>
+        <p data-l="th">ศึกจริงบน production เปิดการ์ดเพื่อดูว่าหา root cause เจอได้ยังไง รายละเอียดของบริษัทยังถูกซีลไว้</p></header>
+      <ul class="bosses">
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The Midnight Timezone Wraith</span><span data-l="th">วิญญาณเขตเวลาเที่ยงคืน</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">Bills created near midnight got the wrong business date.</span><span data-l="th">บิลที่สร้างใกล้เที่ยงคืนได้วันที่ทางบัญชีผิด</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en">Two services read timezone-less datetimes differently.</span><span data-l="th">สอง service อ่าน datetime ที่ไม่มี timezone ไม่เหมือนกัน</span></dd>
+            <dt><span data-l="en">Fix</span><span data-l="th">วิธีแก้</span></dt><dd><span data-l="en">Kept the accounting rule, aligned both publisher and parser to Bangkok time, added a test right at the boundary.</span><span data-l="th">คงกฎบัญชีไว้ ปรับทั้งฝั่งส่งและฝั่ง parse ให้เป็นเวลากรุงเทพ เพิ่มเทสต์ตรงขอบเวลาพอดี</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">Fix the transport contract, not the business rule.</span><span data-l="th">แก้สัญญาการส่งข้อมูล ไม่ใช่กฎธุรกิจ</span></dd>
+          </dl></details></li>
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The 57-Second Ghost</span><span data-l="th">ผี 57 วินาที</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">Bill creation felt slow, yet the endpoint everyone blamed answered in about 199 ms.</span><span data-l="th">การสร้างบิลช้า ทั้งที่ endpoint ที่ทุกคนสงสัยตอบภายในราว 199 ms</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en">Subtracting timestamps between log lines exposed a 57-second gap: a daily count plus lookups with no matching index.</span><span data-l="th">ลบ timestamp ระหว่างบรรทัด log จนเจอช่องว่าง 57 วินาที มาจากการนับรายวันและการ lookup ที่ไม่มี index รองรับ</span></dd>
+            <dt><span data-l="en">Fix</span><span data-l="th">วิธีแก้</span></dt><dd><span data-l="en">Indexes on the exact filter fields. No rewrite of business logic.</span><span data-l="th">เพิ่ม index ตรง field ที่ filter จริง ไม่ต้องเขียน logic ใหม่</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">Measure the gaps between logs, not only the endpoint you suspect.</span><span data-l="th">วัดช่องว่างระหว่าง log ไม่ใช่วัดแค่ endpoint ที่สงสัย</span></dd>
+          </dl></details></li>
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The Webhook Jam</span><span data-l="th">คอขวด Webhook</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">A marketplace cancel never arrived. The queue held <span class="rd" role="img" aria-label="redacted" style="--w:3em"></span> pending events, days old.</span><span data-l="th">คำสั่งยกเลิกจาก marketplace ไม่เคยมาถึง คิวค้างอยู่ <span class="rd" role="img" aria-label="ปิดไว้" style="--w:3em"></span> event ค้างมาหลายวัน</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en">Poisoned retries with the same error kept winning the oldest-first claim, so nothing behind them moved.</span><span data-l="th">retry ที่ error ซ้ำเดิมชนะการหยิบแบบเก่าสุดก่อนทุกรอบ ของที่อยู่ข้างหลังเลยไม่ขยับ</span></dd>
+            <dt><span data-l="en">Fix</span><span data-l="th">วิธีแก้</span></dt><dd><span data-l="en">Fail-fast dead-letter for that error, a rate limiter, priority for cancels. Also caught a stale agent branch that would have deleted the existing dead-letter path.</span><span data-l="th">ส่ง error นั้นเข้า dead-letter ทันที ใส่ rate limiter และให้ cancel มาก่อน ระหว่างทางยังจับได้ว่า branch ของ agent ที่ล้าหลังจะลบ dead-letter เดิมทิ้ง</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">One bad class of message can starve a whole queue.</span><span data-l="th">ข้อความเสียแค่ประเภทเดียวก็ทำให้ทั้งคิวอดตายได้</span></dd>
+          </dl></details></li>
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The Rate-Limit Cascade</span><span data-l="th">น้ำตก Rate Limit</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">After a release, the marketplace answered 429, then the alerts about it hit the chat tool's own rate limit.</span><span data-l="th">หลัง release marketplace ตอบ 429 แล้ว alert ที่แจ้งเรื่องนี้ก็ไปชน rate limit ของแชทอีกทอด</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en">A correctness refactor turned a sequential cron concurrent, and every layer retried immediately.</span><span data-l="th">refactor เพื่อความถูกต้องทำให้ cron ที่เคยรันทีละตัวกลายเป็นรันพร้อมกัน และทุกชั้น retry ทันที</span></dd>
+            <dt><span data-l="en">Fix</span><span data-l="th">วิธีแก้</span></dt><dd><span data-l="en">Honour Retry-After, add a distributed lock, alert once after retries are exhausted.</span><span data-l="th">เคารพ Retry-After ใส่ distributed lock และ alert ครั้งเดียวหลัง retry หมด</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">A correctness fix changes traffic shape. Compute peak QPS and retry amplification first.</span><span data-l="th">การแก้ความถูกต้องเปลี่ยนรูปทราฟฟิกได้ คำนวณ QPS สูงสุดและการขยายตัวของ retry ก่อน</span></dd>
+          </dl></details></li>
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The Lost Broker</span><span data-l="th">Broker ที่หายไป</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">Orders stopped flowing for <span class="rd" role="img" aria-label="redacted" style="--w:2em"></span> hours, while the sender's logs said "Completed".</span><span data-l="th">ออเดอร์หยุดไหลไป <span class="rd" role="img" aria-label="ปิดไว้" style="--w:2em"></span> ชั่วโมง ทั้งที่ log ฝั่งส่งบอกว่า "Completed"</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en">The message broker restarted and the publisher had no reconnect. Proven with a normal day as baseline and neighbouring orders as a control group.</span><span data-l="th">message broker restart แต่ publisher ไม่มี reconnect พิสูจน์ด้วยการเทียบกับวันปกติและใช้ออเดอร์ข้างเคียงเป็นกลุ่มควบคุม</span></dd>
+            <dt><span data-l="en">Fix</span><span data-l="th">วิธีแก้</span></dt><dd><span data-l="en">Nine hardening commits and a backfill until every affected order was billed.</span><span data-l="th">commit เสริมความแข็งแรง 9 ตัว และ backfill จนทุกออเดอร์ที่โดนออกบิลครบ</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">Sender success is not receiver state. Read the system of record.</span><span data-l="th">ฝั่งส่งสำเร็จไม่ได้แปลว่าฝั่งรับได้รับ ให้อ่านจากระบบปลายทาง</span></dd>
+          </dl></details></li>
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The RAM Thrash Golem</span><span data-l="th">โกเลมกิน RAM</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">A database host froze with no out-of-memory kill to explain it.</span><span data-l="th">เครื่อง database ค้าง โดยไม่มี OOM kill ให้เห็นเลย</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en">A swapless host running two uncapped database processes, thrashing under full-collection scans from a 5-minute cron (87% of all slow-query time) and a log collection with no TTL.</span><span data-l="th">เครื่องไม่มี swap รัน database 2 process ที่ไม่จำกัด cache โดน full-collection scan จาก cron ทุก 5 นาที (87% ของเวลา slow query ทั้งหมด) และ collection log ที่ไม่มี TTL</span></dd>
+            <dt><span data-l="en">Fix</span><span data-l="th">วิธีแก้</span></dt><dd><span data-l="en">11 indexes, an audit TTL, 30-day log retention and a live cache cap.</span><span data-l="th">index 11 ตัว, TTL ให้ audit, เก็บ log 30 วัน และจำกัด cache แบบ live</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">Diagnostic reads are load too. Even the investigation's own count queries squeezed free RAM.</span><span data-l="th">query เพื่อวินิจฉัยก็เป็นโหลด แม้แต่ query นับของการสืบสวนเองก็บีบ RAM ที่เหลือ</span></dd>
+          </dl></details></li>
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The Error That Existed Nowhere</span><span data-l="th">Error ที่ไม่มีอยู่ที่ไหนเลย</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">A bulk cancel screen crashed with an address error.</span><span data-l="th">หน้า bulk cancel พังด้วย error เรื่องที่อยู่</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en"><code>git log --all -S</code> found the field in no repo. An untracked one-off script had written a stray key into stored documents, and the ODM rebuilds models from whatever is stored.</span><span data-l="th"><code>git log --all -S</code> หา field นั้นไม่เจอในทุก repo สุดท้ายคือ script ครั้งเดียวที่ไม่ได้เก็บไว้ไปเขียน key แปลกลงเอกสาร และ ODM สร้าง model จากของที่เก็บไว้ทุกครั้ง</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">If the code doesn't contain it, the data does.</span><span data-l="th">ถ้าโค้ดไม่มี ข้อมูลมี</span></dd>
+          </dl></details></li>
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The −7 Hour Shift</span><span data-l="th">เวลาเพี้ยน −7 ชั่วโมง</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">Payment-slip orders were stored seven hours early.</span><span data-l="th">ออเดอร์ที่จ่ายด้วยสลิปถูกบันทึกเวลาเร็วไป 7 ชั่วโมง</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en">A per-hop timezone table, then bucketing <code>created_at − event_time</code>, dated the regression to the second.</span><span data-l="th">ทำตาราง timezone ทีละ hop แล้วจัดกลุ่ม <code>created_at − event_time</code> จนระบุเวลาที่เริ่มพังได้ถึงวินาที</span></dd>
+            <dt><span data-l="en">Fix</span><span data-l="th">วิธีแก้</span></dt><dd><span data-l="en">A one-record pilot showed a downstream handler deliberately pins the old date, which saved a large batch of useless updates.</span><span data-l="th">ลองแก้แค่ 1 record ก่อน แล้วพบว่า handler ปลายทางตั้งใจล็อกวันที่เดิมไว้ เลยไม่ต้องอัปเดตเป็นชุดใหญ่โดยเปล่าประโยชน์</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">Pilot one record before any batch.</span><span data-l="th">ลอง 1 record ก่อนรันทั้งชุดเสมอ</span></dd>
+          </dl></details></li>
+        <li class="boss"><details><summary>
+          <span class="bname"><span data-l="en">The Number Thief</span><span data-l="th">หัวขโมยเลขที่เอกสาร</span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Symptom</span><span data-l="th">อาการ</span></dt><dd><span data-l="en">After a data recovery, a running-number generator started reissuing numbers the ERP already held.</span><span data-l="th">หลังกู้ข้อมูล ตัวรันเลขเอกสารเริ่มออกเลขที่ ERP มีอยู่แล้วซ้ำ</span></dd>
+            <dt><span data-l="en">Root cause</span><span data-l="th">ต้นเหตุ</span></dt><dd><span data-l="en">The ORM's unique constraint was never enforced in the database.</span><span data-l="th">unique constraint ของ ORM ไม่เคยถูกบังคับจริงใน database</span></dd>
+            <dt><span data-l="en">Fix</span><span data-l="th">วิธีแก้</span></dt><dd><span data-l="en">Rebuilt records from snapshots, added a real unique index, resumed numbering above the highest billed, repaired items through the normal flow, and counted the queued orders that would have collided before running anything.</span><span data-l="th">สร้าง record กลับจาก snapshot ใส่ unique index ของจริง รันเลขต่อจากเลขสูงสุดที่ออกบิลแล้ว ซ่อมผ่าน flow ปกติของระบบ และนับออเดอร์ในคิวที่จะชนก่อนรันอะไรทั้งนั้น</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">"The unique constraint didn't prevent the damage. It chose its shape."</span><span data-l="th">"unique constraint ไม่ได้กันความเสียหาย มันแค่เลือกรูปร่างของความเสียหาย"</span></dd>
+          </dl></details></li>
+        <li class="boss sealed"><details><summary>
+          <span class="bname"><span data-l="en">Sealed boss</span><span data-l="th">บอสที่ถูกซีล</span> <span class="rd" role="img" aria-label="redacted" style="--w:6em"></span></span>
+          <span class="hp" aria-hidden="true"><i></i></span><span class="state"><span data-l="en">Defeated</span><span data-l="th">ปราบแล้ว</span></span></summary>
+          <dl>
+            <dt><span data-l="en">Report</span><span data-l="th">รายงาน</span></dt><dd><span class="rd" role="img" aria-label="redacted" style="--w:12em"></span> <span class="rd" role="img" aria-label="redacted" style="--w:7em"></span></dd>
+            <dt><span data-l="en">Status</span><span data-l="th">สถานะ</span></dt><dd><span data-l="en">Root cause pinned to the exact process and call stack. Post-mortem written in Thai and English.</span><span data-l="th">ระบุ root cause ได้ถึง process และ call stack เขียน post-mortem ทั้งไทยและอังกฤษ</span></dd>
+            <dt><span data-l="en">Lesson</span><span data-l="th">บทเรียน</span></dt><dd><span data-l="en">An empty grep is evidence about the grep, not about the world.</span><span data-l="th">grep ที่ไม่เจออะไร เป็นหลักฐานเรื่อง grep ไม่ใช่เรื่องของโลก</span></dd>
+          </dl></details></li>
+      </ul>
+    </section>
+
+    <section class="panel" id="quests" data-zone="5">
       <header><h2><span data-l="en">Quest log</span><span data-l="th">บันทึกเควสต์</span></h2>
         <p data-l="en">Main quests run in production, so internal details are sealed under NDA. Ask me about them in person. Side quests are things I build because I want them to exist.</p>
         <p data-l="th">เควสต์หลักรันอยู่บน production จริง รายละเอียดภายในจึงถูกปิดไว้ตาม NDA อยากรู้ถามผมตัวต่อตัวได้ ส่วน side quest คือของที่ผมสร้างเพราะอยากให้มันมีอยู่จริง</p></header>
@@ -402,31 +599,52 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
           <p data-l="th">แหล่งข้อมูลจริงหนึ่งเดียวของ <span class="rd" role="img" aria-label="ปิดไว้" style="--w:4.5em"></span> ที่หลายระบบใช้ร่วมกัน</p>
           <ul class="tags"><li>Data modelling</li><li class="rd" role="img" aria-label="redacted" style="--w:3em"></li></ul>
         </li>
+        <li class="quest main" data-quest="6">
+          <span class="tier"><span data-l="en">Main quest</span><span data-l="th">เควสต์หลัก</span><span class="seal">NDA</span></span>
+          <h3><span data-l="en">In-house ERP</span><span data-l="th">ERP ภายในบริษัท</span> <span class="rd" role="img" aria-label="redacted" style="--w:4em"></span></h3>
+          <p data-l="en">Led five sprints and four schema phases in about a week, then merged with more than 4,000 backend and 1,000 frontend tests green. A real-data rehearsal matched every money total.</p>
+          <p data-l="th">นำ 5 สปรินต์และ schema 4 เฟสในราวหนึ่งสัปดาห์ แล้ว merge โดยเทสต์ backend กว่า 4,000 และ frontend กว่า 1,000 ผ่านหมด ซ้อมกับข้อมูลจริงแล้วยอดเงินตรงทุกยอด</p>
+          <ul class="tags"><li>Go</li><li>PostgreSQL</li><li>React</li><li class="rd" role="img" aria-label="redacted" style="--w:3em"></li></ul>
+        </li>
         <li class="quest side" data-quest="3">
           <span class="tier"><span data-l="en">Side quest</span><span data-l="th">เควสต์รอง</span></span>
           <h3>ห้องสื่อ Studio</h3>
-          <p data-l="en">A builder for illustrated worksheets for young kids: live A4 preview, answer keys, PDF rendering, and AI help that runs on a local model.</p>
-          <p data-l="th">เครื่องมือสร้างใบงานมีภาพประกอบสำหรับเด็กเล็ก พรีวิว A4 สด มีเฉลย render เป็น PDF และมี AI ช่วยที่รันบนโมเดล local</p>
-          <ul class="tags"><li>Nuxt</li><li>PDF</li><li>Ollama</li></ul>
+          <p data-l="en">A studio for kids' learning materials: daily K1–K3 worksheet packs, an activity engine (Thai consonants ก–ฮ, picture counting, colouring pages), virus-scanned uploads, rights review, sealed PDF releases and local AI on a 0 baht a day budget.</p>
+          <p data-l="th">สตูดิโอผลิตสื่อการเรียนสำหรับเด็ก มีชุดใบงานรายวันระดับ อ.1–อ.3, activity engine (พยัญชนะ ก–ฮ, นับภาพ, ระบายสี), ไฟล์อัปโหลดผ่านการสแกนไวรัส, ตรวจลิขสิทธิ์, ปล่อย PDF แบบซีล และ AI บนเครื่องในงบ 0 บาทต่อวัน</p>
+          <ul class="tags"><li>Django</li><li>Nuxt 4</li><li>PostgreSQL</li><li>ClamAV</li><li>Ollama</li></ul>
         </li>
         <li class="quest side" data-quest="4">
           <span class="tier"><span data-l="en">Side quest</span><span data-l="th">เควสต์รอง</span></span>
           <h3>Iris Meetings</h3>
-          <p data-l="en">Meet and Zoom calls are transcribed on my machine, summarised by Iris, and posted to Discord as notes with the full transcript.</p>
-          <p data-l="th">ถอดเสียงประชุม Meet และ Zoom บนเครื่องตัวเอง ให้ Iris สรุป แล้วโพสต์ลง Discord เป็นโน้ตพร้อม transcript เต็ม</p>
-          <ul class="tags"><li>Python stdlib</li><li>Local STT</li><li>Discord</li></ul>
+          <p data-l="en">Meet and Zoom calls are transcribed on my machine with Whisper, summarised by Iris, and posted to Discord only after a human presses send. Owner-only slash commands.</p>
+          <p data-l="th">ถอดเสียงประชุม Meet และ Zoom บนเครื่องตัวเองด้วย Whisper ให้ Iris สรุป แล้วโพสต์ลง Discord เมื่อคนกดส่งเท่านั้น ใช้ slash command ได้เฉพาะเจ้าของ</p>
+          <ul class="tags"><li>Python stdlib</li><li>faster-whisper</li><li>Discord</li></ul>
         </li>
         <li class="quest side" data-quest="5">
           <span class="tier"><span data-l="en">Side quest</span><span data-l="th">เควสต์รอง</span></span>
           <h3>Oracle workflow</h3>
-          <p data-l="en">A task record for my agent party: the brief, the pinned commit, each worker's git worktree, and the evidence review before anything counts as done.</p>
-          <p data-l="th">ระบบบันทึกงานของปาร์ตี้ agent เก็บ brief, commit ที่ปักไว้, git worktree ของแต่ละตัว และการตรวจหลักฐานก่อนนับว่างานเสร็จ</p>
-          <ul class="tags"><li>Git worktrees</li><li>Bun</li><li>Herdr</li></ul>
+          <p data-l="en">A task ledger for my agent party: hashed briefs and evidence, a pinned base commit, one git worktree per worker, plan-only until <code>--apply</code>, and an HTML dashboard. Pilot: two Codex workers, 16 tests passing.</p>
+          <p data-l="th">สมุดบันทึกงานของปาร์ตี้ agent เก็บ hash ของ brief และหลักฐาน, commit ฐานที่ปักไว้, git worktree แยกต่อ worker, ทำแค่แผนจนกว่าจะสั่ง <code>--apply</code> และมี dashboard HTML ทดลองจริงกับ Codex 2 ตัว เทสต์ผ่าน 16 ตัว</p>
+          <ul class="tags"><li>Python stdlib</li><li>Git worktrees</li><li>Herdr</li></ul>
+        </li>
+        <li class="quest side" data-quest="7">
+          <span class="tier"><span data-l="en">Side quest</span><span data-l="th">เควสต์รอง</span></span>
+          <h3>HOLD THAT</h3>
+          <p data-l="en">A repair-shop game prototype: an Unreal C++ core plus a Three.js browser demo, with a tutorial, three save slots, upgrades, glass repair and first aid. Core tests pass under sanitizers.</p>
+          <p data-l="th">ต้นแบบเกมร้านซ่อม แกนหลักเป็น Unreal C++ มีเดโมบนเบราว์เซอร์ด้วย Three.js มี tutorial, ช่องเซฟ 3 ช่อง, อัปเกรด, ซ่อมกระจก และปฐมพยาบาล เทสต์แกนหลักผ่านภายใต้ sanitizer</p>
+          <ul class="tags"><li>Unreal C++</li><li>Three.js</li><li>Game design</li></ul>
+        </li>
+        <li class="quest side" data-quest="8">
+          <span class="tier"><span data-l="en">Side quest</span><span data-l="th">เควสต์รอง</span></span>
+          <h3>Securo</h3>
+          <p data-l="en">Contributed to a fork of an open-source, self-hosted personal finance app: Thai bank statement import, liabilities and debt payments.</p>
+          <p data-l="th">ร่วมพัฒนาใน fork ของแอปการเงินส่วนตัวแบบ self-hosted ที่เป็น open source เพิ่มการ import statement ธนาคารไทย หนี้สิน และการชำระหนี้</p>
+          <ul class="tags"><li>FastAPI</li><li>React</li><li>Celery</li></ul>
         </li>
       </ul>
     </section>
 
-    <section class="panel" id="party" data-zone="4">
+    <section class="panel" id="party" data-zone="6">
       <header><h2><span data-l="en">Party</span><span data-l="th">ปาร์ตี้</span></h2>
         <p data-l="en">I don't play solo. Select a member to see them in the world.</p>
         <p data-l="th">ผมไม่เล่นเดี่ยว เลือกสมาชิกเพื่อดูตัวจริงในโลก 3D</p></header>
@@ -446,7 +664,7 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
         <li><button class="member" data-agent="reina" style="--c:#ff7a8a;--shape:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)">
           <span class="sig"></span>
           <span class="h">Reina 怜奈 <small><span data-l="en">Night watch</span><span data-l="th">ยามกะดึก</span></small></span>
-          <span class="d"><span data-l="en">Runs on a Hermes gateway around the clock on Slack, Telegram and Discord. Flags new error patterns as they appear and sends a summary every morning.</span><span data-l="th">อยู่บน Hermes gateway ตลอด 24 ชม. ทั้ง Slack, Telegram และ Discord เตือนทันทีเมื่อเจอ error รูปแบบใหม่ และส่งสรุปทุกเช้า</span></span>
+          <span class="d"><span data-l="en">Runs on a Hermes gateway around the clock on Slack, Telegram and Discord. Flags new error patterns as they appear, sends a summary every morning, and talks in Discord voice.</span><span data-l="th">อยู่บน Hermes gateway ตลอด 24 ชม. ทั้ง Slack, Telegram และ Discord เตือนทันทีเมื่อเจอ error รูปแบบใหม่ ส่งสรุปทุกเช้า และคุยในห้องเสียง Discord ได้</span></span>
           <span class="ability"><span data-l="en">Ability: Never logs off</span><span data-l="th">ความสามารถ: ไม่เคยออฟไลน์</span></span>
         </button></li>
         <li><button class="member" data-agent="squad" style="--c:#f2b544;--shape:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)">
@@ -471,7 +689,7 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
       </div>
     </section>
 
-    <section class="panel" id="save" data-zone="5">
+    <section class="panel" id="save" data-zone="7">
       <header><h2><span data-l="en">Save point</span><span data-l="th">จุดเซฟ</span></h2>
         <p data-l="en">Want to team up on a quest? Send a message.</p>
         <p data-l="th">อยากร่วมเควสต์ด้วยกัน ทักมาได้เลย</p></header>
@@ -491,12 +709,14 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
     <p class="speaker">Iris <small><span data-l="en">guide</span><span data-l="th">ผู้นำทาง</span></small></p>
     <p class="line"><span id="typed" aria-hidden="true"></span><span class="caret" aria-hidden="true"></span><span class="sr" id="said" aria-live="polite"></span></p>
     <div class="controls">
-      <span class="hint"><span data-l="en">← → or 1–6 to travel</span><span data-l="th">← → หรือ 1–6 เพื่อเดินทาง</span></span>
+      <span class="hint"><span data-l="en">← → or 1–8 to travel</span><span data-l="th">← → หรือ 1–8 เพื่อเดินทาง</span></span>
       <button class="btn" id="back" type="button"><span data-l="en">Back</span><span data-l="th">ย้อน</span></button>
       <button class="btn" id="next" type="button"></button>
     </div>
   </div>
 </main>
+
+<div class="toast" id="toast" role="status" hidden><i></i><span><small><span data-l="en">Achievement unlocked</span><span data-l="th">ปลดล็อกความสำเร็จ</span></small><b><span data-l="en">Explorer</span><span data-l="th">นักสำรวจ</span></b></span></div>
 
 <script type="importmap">
 { "imports": {
@@ -515,7 +735,7 @@ import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const HASH = ['start', 'player', 'skills', 'quests', 'party', 'save'];
+const HASH = ['start', 'player', 'skills', 'log', 'bosses', 'quests', 'party', 'save'];
 
 const L = (en, th) => ({ en, th });
 const LINES = [
@@ -525,6 +745,10 @@ const LINES = [
     "นี่คือ Ford เขาสร้างเส้นทางของเงินที่ Opendurian ออเดอร์เข้า บิลออก ทุกบาทตรวจย้อนได้ ตัวเลขพวกนี้มาจาก memory log ของเขา ไม่ได้เดา"),
   L("These are his skill branches. He didn't rate himself, Jacob counted. The brightest stars are the tools behind the most hard-won lessons.",
     "นี่คือกิ่งสกิล Ford ไม่ได้ให้คะแนนตัวเอง Jacob เป็นคนนับ ดาวที่สว่างที่สุดคือเครื่องมือที่อยู่เบื้องหลังบทเรียนที่ได้มายากที่สุด"),
+  L("Level history. Jacob's ladder grows one rung per milestone. Most of the climb happened after the party formed in July.",
+    "เส้นทางเลเวล บันไดของ Jacob โตขึ้นหนึ่งขั้นต่อหนึ่ง milestone ส่วนใหญ่ไต่ขึ้นมาหลังตั้งปาร์ตี้เมื่อกรกฎาคม"),
+  L("Boss battles. Every one of these hit production, and every one is down. Open a card to see how Ford found the root cause. The worst one stays sealed.",
+    "ห้องบอส ทุกตัวเคยโจมตี production จริง และถูกปราบหมดแล้ว เปิดการ์ดดูได้ว่า Ford หา root cause เจอได้ยังไง ตัวที่หนักที่สุดยังถูกซีลไว้"),
   L("His quest log. The gold tablets are live production work, so the sensitive parts are sealed under NDA. Ask Ford in person. The green ones are side quests he built for fun.",
     "บันทึกเควสต์ แผ่นสีทองคืองานบน production จริง ส่วนที่ sensitive เลยถูกซีลไว้ตาม NDA อยากรู้ต้องถาม Ford เอง แผ่นสีเขียวคือ side quest ที่เขาทำเพราะอยากทำ"),
   L("Ford doesn't solo. Jacob keeps the memory, Reina keeps watch overnight, the durian squad and Codex build, and I keep things in focus. Ford still makes every call. Tap one of us.",
@@ -584,11 +808,21 @@ function go(n, { line } = {}) {
   $('#next').textContent = zone === HASH.length - 1 ? t('Start over', 'เริ่มใหม่') : t('Next', 'ต่อไป');
   say(line || LINES[zone]);
   world?.fly(zone);
+  visit(zone);
   try { history.replaceState(null, '', '#' + HASH[zone]); } catch {}
+}
+const seen = new Set();
+function visit(z) {
+  seen.add(z);
+  if (seen.size < HASH.length || !$('#explorer').classList.contains('locked')) return;
+  $('#explorer').classList.remove('locked');
+  const toast = $('#toast'); toast.hidden = false;
+  setTimeout(() => toast.classList.add('out'), 3200);
+  setTimeout(() => { toast.hidden = true; toast.classList.remove('out'); }, 3600);
 }
 function select(agent) {
   $$('.member').forEach(m => m.classList.toggle('lit', m.dataset.agent === agent));
-  if (zone !== 4) go(4, { line: AGENT_LINES[agent] }); else say(AGENT_LINES[agent]);
+  if (zone !== 6) go(6, { line: AGENT_LINES[agent] }); else say(AGENT_LINES[agent]);
   $(`.member[data-agent="${agent}"]`)?.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
   world?.pulse(agent);
 }
@@ -620,7 +854,7 @@ addEventListener('keydown', e => {
   if (document.body.classList.contains('doc') || e.target.closest('input,textarea')) return;
   if (e.key === 'ArrowRight') go(zone + 1);
   else if (e.key === 'ArrowLeft') go(zone - 1);
-  else if (/^[1-6]$/.test(e.key)) go(+e.key - 1);
+  else if (/^[1-8]$/.test(e.key)) go(+e.key - 1);
 });
 go(Math.max(0, HASH.indexOf(location.hash.slice(1))));
 setLang(lang);
@@ -654,7 +888,7 @@ function buildWorld(canvas) {
   // stations around the ring
   const R = 17;
   const at = a => new THREE.Vector3(Math.sin(a) * R, 0, Math.cos(a) * R);
-  const P = { skills: at(1.15), quests: at(2.45), party: at(-2.45), save: at(-1.15) };
+  const P = { skills: at(.8), log: at(1.65), bosses: at(2.5), quests: at(-2.5), party: at(-1.65), save: at(-.8) };
   const pickable = [];
   const tickers = [];
 
@@ -711,7 +945,7 @@ function buildWorld(canvas) {
   const quests = new THREE.Group(); quests.position.copy(P.quests); scene.add(quests); quests.lookAt(0, 0, 0);
   $$('.quest').forEach((q, i, all) => {
     const main = q.classList.contains('main');
-    const a = (i - (all.length - 1) / 2) * .42;
+    const a = (i - (all.length - 1) / 2) * Math.min(.42, 2.6 / all.length);
     const tab = new THREE.Group();
     tab.position.set(Math.sin(a) * 3.2, 1.6 + (main ? .35 : 0), -Math.cos(a) * 3.2 + 3.2);
     tab.rotation.y = -a;
@@ -792,8 +1026,47 @@ function buildWorld(canvas) {
     }));
   }
 
+  // --- Level history: Jacob's ladder spiral, one step per milestone
+  const log = new THREE.Group(); log.position.copy(P.log); scene.add(log); log.userData.zone = 3; pickable.push(log);
+  log.add(mesh(new THREE.CylinderGeometry(.05, .08, 5, 6), std(0x4f7d5c), 0, 2.5, 0));
+  const steps = $$('.timeline li');
+  steps.forEach((li, i) => {
+    const a = i * .62, y = .25 + i * .36, now = li.classList.contains('now');
+    const step = mesh(new THREE.BoxGeometry(.95, .07, .34), now ? glow(SAP, 1.2) : trim, Math.cos(a) * .55, y, Math.sin(a) * .55);
+    step.rotation.y = -a; log.add(step);
+    const bead = mesh(new THREE.IcosahedronGeometry(now ? .16 : .07, 0), glow(now ? SAP : (i < 3 ? SKY : LEAF), now ? 3 : 1.8), Math.cos(a) * 1.05, y + .12, Math.sin(a) * 1.05);
+    bead.userData.phase = i; log.add(bead); nodes.push(bead);
+  });
+  const crown = new THREE.Group(); crown.position.y = .25 + steps.length * .36 + .3; log.add(crown);
+  for (let i = 0; i < 5; i++) { const pt = mesh(new THREE.SphereGeometry(.2, 8, 6), glow(PETAL, 1.5), Math.cos(i * 1.2566) * .24, 0, Math.sin(i * 1.2566) * .24); pt.scale.set(1, .45, 1); crown.add(pt); }
+  tickers.push(t => { log.rotation.y = Math.sin(t * .2) * .25; crown.rotation.y = t * .4; });
+
+  // --- Boss arena: a defeated bug, one shard orbiting per boss
+  const arena = new THREE.Group(); arena.position.copy(P.bosses); scene.add(arena); arena.lookAt(0, 0, 0); arena.userData.zone = 4; pickable.push(arena);
+  const BLOOD = 0xff5a5f;
+  const floorRing = mesh(new THREE.TorusGeometry(2.6, .03, 6, 96), glow(BLOOD, 1.6), 0, .03, 0); floorRing.rotation.x = Math.PI / 2; arena.add(floorRing);
+  const bug = new THREE.Group(); bug.position.y = .75; bug.rotation.z = .35; arena.add(bug);
+  const shell = new THREE.IcosahedronGeometry(1, 0);
+  const body = new THREE.Mesh(shell, std(0x2a1a1e, { metalness: .5, roughness: .3 })); body.scale.set(1.3, .7, 1.7); bug.add(body);
+  const seams = new THREE.LineSegments(new THREE.EdgesGeometry(shell), new THREE.LineBasicMaterial({ color: BLOOD })); seams.scale.copy(body.scale).multiplyScalar(1.01); bug.add(seams);
+  const bhead = mesh(new THREE.IcosahedronGeometry(.5, 0), std(0x2a1a1e), 0, .1, -1.75); bug.add(bhead);
+  [-.2, .2].forEach(x => [1, -1].forEach(k => { const e = mesh(new THREE.BoxGeometry(.2, .04, .04), glow(BLOOD, 2.5), x, .25, -2.2); e.rotation.z = k * .785; bug.add(e); }));
+  for (let i = 0; i < 6; i++) {
+    const side = i < 3 ? 1 : -1, z = -.9 + (i % 3) * .9;
+    const leg = mesh(new THREE.CylinderGeometry(.05, .03, 1.3, 5), std(0x3a2228), side * 1.35, -.35, z);
+    leg.rotation.z = side * -2.2; bug.add(leg);
+  }
+  const shards = $$('.boss').map((b, i, all) => {
+    const sh = mesh(new THREE.OctahedronGeometry(b.classList.contains('sealed') ? .22 : .14, 0), b.classList.contains('sealed') ? glow(0xffffff, 1.2) : glow(BLOOD, 2), 0, 0, 0);
+    sh.userData.a = i / all.length * Math.PI * 2; arena.add(sh); return sh;
+  });
+  tickers.push(t => {
+    bug.position.y = .75 + Math.sin(t * .8) * .04;
+    shards.forEach((sh, i) => { const a = sh.userData.a + t * .25; sh.position.set(Math.cos(a) * 2.6, 1.6 + Math.sin(t * 1.4 + i) * .25, Math.sin(a) * 2.6); sh.rotation.y = t * 2; });
+  });
+
   // --- Save crystal with light beam
-  const save = new THREE.Group(); save.position.copy(P.save); scene.add(save); save.userData.zone = 5; pickable.push(save);
+  const save = new THREE.Group(); save.position.copy(P.save); scene.add(save); save.userData.zone = 7; pickable.push(save);
   const crystal = mesh(new THREE.OctahedronGeometry(.7, 0), glow(SAP, 1.4), 0, 1.8, 0); crystal.scale.y = 1.5; save.add(crystal);
   save.add(mesh(new THREE.CylinderGeometry(1.1, 1.3, .3, 8), std(0x1b3029, { metalness: .6 }), 0, .15, 0));
   const beam = mesh(new THREE.CylinderGeometry(.5, .9, 14, 24, 1, true), new THREE.MeshBasicMaterial({ color: SAP, transparent: true, opacity: .07, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false }), 0, 7, 0);
@@ -829,9 +1102,11 @@ function buildWorld(canvas) {
   const stop = (p, dist, h, lookY) => ({ pos: p.clone().add(out(p).multiplyScalar(dist)).setY(h), look: p.clone().setY(lookY) });
   const STOPS = [
     { pos: new THREE.Vector3(0, 12, 32), look: new THREE.Vector3(0, 1.5, 0) },
-    { pos: new THREE.Vector3(0, 2.6, 7), look: new THREE.Vector3(0, 1.7, 0) },
+    { pos: new THREE.Vector3(0, 3.4, 10.5), look: new THREE.Vector3(0, 1.6, 0) },
     stop(P.skills, 8, 3.6, 2.6),
-    stop(P.quests, 8.5, 3.4, 1.7),
+    stop(P.log, 8.5, 4, 2.6),
+    stop(P.bosses, 9, 3.6, 1.4),
+    stop(P.quests, 9.5, 3.4, 1.7),
     stop(P.party, 10.5, 4.2, 1.5),
     stop(P.save, 7.5, 3.2, 2.2),
   ];
@@ -842,7 +1117,7 @@ function buildWorld(canvas) {
     const s = STOPS[z], far = innerWidth > 820 ? 1 : 1.7;
     const to = { look: s.look, pos: s.look.clone().add(s.pos.clone().sub(s.look).multiplyScalar(far)) };
     const right = new THREE.Vector3().subVectors(to.look, to.pos).cross(new THREE.Vector3(0, 1, 0)).normalize();
-    irisTarget.copy(to.look).addScaledVector(right, z === 0 ? 2.5 : 1.7).add(new THREE.Vector3(0, z === 0 ? 3 : 1.1, 0)).lerp(to.pos, z === 0 ? .55 : .3);
+    irisTarget.copy(to.look).addScaledVector(right, z === 0 ? 2.5 : 2.4).add(new THREE.Vector3(0, z === 0 ? 3 : 1.1, 0)).lerp(to.pos, z === 0 ? .55 : .3);
     if (reduced) { cur.pos.copy(to.pos); cur.look.copy(to.look); iris.position.copy(irisTarget); return; }
     tween = { from: { pos: cur.pos.clone(), look: cur.look.clone() }, to, t0: performance.now(), dur: 1500 };
   }
@@ -884,7 +1159,7 @@ function buildWorld(canvas) {
     const o = hit(e); if (!o) return;
     if (o.userData.agent) select(o.userData.agent);
     else if (o.userData.quest !== undefined) {
-      if (zone !== 3) go(3);
+      if (zone !== 5) go(5);
       const card = $$('.quest')[o.userData.quest];
       $$('.quest').forEach(q => q.classList.toggle('lit', q === card));
       card.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
