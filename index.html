@@ -156,6 +156,24 @@ ul { margin: 0; padding: 0; list-style: none; }
 .links .copy { justify-self: start; margin-top: 6px; }
 .sign { color: var(--dim); font-size: .82rem; }
 
+/* Language: both texts ship, one shows */
+html[lang="en"] [data-l="th"], html[lang="th"] [data-l="en"] { display: none !important; }
+html[lang="th"] body { line-height: 1.75; }
+.tools { display: flex; gap: 6px; }
+#lang span { opacity: .5; }
+#lang span + span::before { content: "/"; margin: 0 6px; opacity: .5; }
+html[lang="en"] #lang [data-on="en"], html[lang="th"] #lang [data-on="th"] { opacity: 1; color: var(--sap); }
+/* Redaction: nothing real hides under the bar */
+.rd {
+  display: inline-block; width: var(--w, 4em); height: 1em; vertical-align: -.12em;
+  background: repeating-linear-gradient(135deg, var(--ink) 0 7px, var(--dim) 7px 9px);
+}
+.tags li.rd { height: 1.55em; padding: 0; border: 0; opacity: .6; }
+.seal {
+  display: inline-block; margin-left: 10px; padding: 2px 5px; transform: rotate(-4deg);
+  font: 700 .7rem/1 var(--f-display); letter-spacing: .06em; color: var(--lantern); border: 1.5px solid currentColor;
+}
+
 /* ---------- Game mode (JS on) ---------- */
 body.game { height: 100dvh; overflow: hidden; }
 body.game .deck {
@@ -242,17 +260,20 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
 <header class="hud">
   <div class="plate">
     <span class="p1">P1</span>
-    <div><b>FORD</b><small>Finance &amp; commerce engineer, party leader</small></div>
+    <div><b>FORD</b><small><span data-l="en">Finance &amp; commerce engineer, party leader</span><span data-l="th">วิศวกรระบบการเงินและคอมเมิร์ซ หัวหน้าปาร์ตี้</span></small></div>
   </div>
   <nav class="zones" aria-label="Resume sections">
-    <button data-go="0"><span class="k">1</span>Start</button>
-    <button data-go="1"><span class="k">2</span>Player</button>
-    <button data-go="2"><span class="k">3</span>Skills</button>
-    <button data-go="3"><span class="k">4</span>Quests</button>
-    <button data-go="4"><span class="k">5</span>Party</button>
-    <button data-go="5"><span class="k">6</span>Save</button>
+    <button data-go="0"><span class="k">1</span><span data-l="en">Start</span><span data-l="th">เริ่ม</span></button>
+    <button data-go="1"><span class="k">2</span><span data-l="en">Player</span><span data-l="th">ผู้เล่น</span></button>
+    <button data-go="2"><span class="k">3</span><span data-l="en">Skills</span><span data-l="th">สกิล</span></button>
+    <button data-go="3"><span class="k">4</span><span data-l="en">Quests</span><span data-l="th">เควสต์</span></button>
+    <button data-go="4"><span class="k">5</span><span data-l="en">Party</span><span data-l="th">ปาร์ตี้</span></button>
+    <button data-go="5"><span class="k">6</span><span data-l="en">Save</span><span data-l="th">เซฟ</span></button>
   </nav>
-  <button class="btn ghost" id="mode" hidden>Plain resume</button>
+  <div class="tools">
+    <button class="btn ghost lang" id="lang" type="button" aria-label="Switch language / เปลี่ยนภาษา"><span data-on="en">EN</span><span data-on="th">ไทย</span></button>
+    <button class="btn ghost" id="mode" type="button" hidden></button>
+  </div>
 </header>
 
 <main class="deck">
@@ -260,39 +281,46 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
 
     <section class="panel" id="start" data-zone="0">
       <h1 class="title">Ford<span>Chissanupong Prom-on</span></h1>
-      <p class="classline">Full-stack engineer for finance and commerce systems. Leads a party of AI agents.</p>
-      <p class="pitch">I build the paths money takes at Opendurian: marketplace orders come in, bills go out, and every baht can be traced back to where it came from. My agents keep the memory, watch production overnight and write code in parallel. I make the calls.</p>
+      <p class="classline" data-l="en">Full-stack engineer for finance and commerce systems. Leads a party of AI agents.</p>
+      <p class="classline" data-l="th">Full-stack engineer สายระบบการเงินและคอมเมิร์ซ ทำงานกับปาร์ตี้ AI agents ของตัวเอง</p>
+      <p class="pitch" data-l="en">I build the paths money takes at Opendurian: orders come in, bills go out, and every baht can be traced back to where it came from. My agents keep the memory, watch production overnight and write code in parallel. I make the calls.</p>
+      <p class="pitch" data-l="th">ผมสร้างเส้นทางที่เงินเดินผ่านที่ Opendurian ออเดอร์เข้า บิลออก และทุกบาทตรวจย้อนได้ว่ามาจากไหน agents ของผมช่วยจำ เฝ้า production ตอนกลางคืน และเขียนโค้ดคู่ขนาน ส่วนการตัดสินใจเป็นของผม</p>
     </section>
 
     <section class="panel" id="player" data-zone="1">
-      <header><h2>Player</h2><p>Character sheet, counted from my Oracle's memory as of October 2026.</p></header>
+      <header><h2><span data-l="en">Player</span><span data-l="th">ผู้เล่น</span></h2>
+        <p data-l="en">Character sheet, counted from my Oracle's memory as of October 2026.</p>
+        <p data-l="th">ค่าสถานะตัวละคร นับจากความจำของ Oracle ณ ตุลาคม 2026</p></header>
       <div class="stats">
-        <div><b class="num">172</b><span>lessons written down after real bugs and reviews</span></div>
-        <div><b class="num">578</b><span>work sessions with a written retrospective</span></div>
-        <div><b class="num">50</b><span>tasks handed to agents with a brief and evidence check</span></div>
-        <div><b class="num">7</b><span>agents in the party, each with its own role</span></div>
+        <div><b class="num">172</b><span data-l="en">lessons written down after real bugs and reviews</span><span data-l="th">บทเรียนที่จดไว้หลังเจอบั๊กและรีวิวจริง</span></div>
+        <div><b class="num">578</b><span data-l="en">work sessions with a written retrospective</span><span data-l="th">session ทำงานที่มี retrospective เขียนไว้</span></div>
+        <div><b class="num">50</b><span data-l="en">tasks handed to agents with a brief and evidence check</span><span data-l="th">งานที่ส่งให้ agent พร้อม brief และการตรวจหลักฐาน</span></div>
+        <div><b class="num">7</b><span data-l="en">agents in the party, each with its own role</span><span data-l="th">agents ในปาร์ตี้ แต่ละตัวมีหน้าที่ของตัวเอง</span></div>
       </div>
       <dl class="kv">
-        <dt>Class</dt><dd>Full-stack engineer</dd>
-        <dt>Guild</dt><dd>Opendurian, finance and order platform</dd>
-        <dt>Origin</dt><dd>Software Engineering, University of Phayao</dd>
-        <dt>Region</dt><dd>Thailand</dd>
-        <dt>Languages</dt><dd>Thai, English</dd>
+        <dt><span data-l="en">Class</span><span data-l="th">อาชีพ</span></dt><dd>Full-stack engineer</dd>
+        <dt><span data-l="en">Guild</span><span data-l="th">กิลด์</span></dt><dd>Opendurian</dd>
+        <dt><span data-l="en">Origin</span><span data-l="th">ที่มา</span></dt><dd><span data-l="en">Software Engineering, University of Phayao</span><span data-l="th">วิศวกรรมซอฟต์แวร์ มหาวิทยาลัยพะเยา</span></dd>
+        <dt><span data-l="en">Region</span><span data-l="th">ภูมิภาค</span></dt><dd><span data-l="en">Thailand</span><span data-l="th">ประเทศไทย</span></dd>
+        <dt><span data-l="en">Languages</span><span data-l="th">ภาษา</span></dt><dd><span data-l="en">Thai, English</span><span data-l="th">ไทย อังกฤษ</span></dd>
       </dl>
-      <h3>Passive abilities</h3>
+      <h3><span data-l="en">Passive abilities</span><span data-l="th">สกิลติดตัว</span></h3>
       <ul class="passives">
-        <li>A test only counts after I've seen it fail.</li>
-        <li>Count the rows before claiming a search works.</li>
-        <li>Check the database engine before writing the spec.</li>
-        <li>Say what "done" was measured against.</li>
-        <li>Ask about scope before touching production data.</li>
+        <li><span data-l="en">A test only counts after I've seen it fail.</span><span data-l="th">เทสต์จะนับก็ต่อเมื่อเคยเห็นมันแดงมาก่อน</span></li>
+        <li><span data-l="en">Count the rows before claiming a search works.</span><span data-l="th">นับแถวก่อนบอกว่าการค้นหาใช้ได้</span></li>
+        <li><span data-l="en">Check the database engine before writing the spec.</span><span data-l="th">เช็ค database engine ก่อนเขียน spec</span></li>
+        <li><span data-l="en">Say what "done" was measured against.</span><span data-l="th">บอกให้ชัดว่า "เสร็จ" วัดจากเกณฑ์อะไร</span></li>
+        <li><span data-l="en">Ask about scope before touching production data.</span><span data-l="th">ถามขอบเขตก่อนแตะข้อมูล production</span></li>
       </ul>
-      <p class="footnote">Each line is a real lesson title from my memory log, not a slogan.</p>
+      <p class="footnote" data-l="en">Each line is a real lesson title from my memory log, not a slogan.</p>
+      <p class="footnote" data-l="th">ทุกบรรทัดคือหัวข้อบทเรียนจริงจาก memory log ไม่ใช่สโลแกน</p>
     </section>
 
     <section class="panel" id="skills" data-zone="2">
-      <header><h2>Skill tree</h2><p>I didn't rate myself. Each bar shows how many of my 172 written lessons involve that tool, so the long ones are where I've done the most hard work.</p></header>
-      <div class="branch" style="--c:#f2b544" data-branch="Commerce &amp; ERP">
+      <header><h2><span data-l="en">Skill tree</span><span data-l="th">ต้นไม้สกิล</span></h2>
+        <p data-l="en">I didn't rate myself. Each bar shows how many of my 172 written lessons involve that tool, so the long ones are where I've done the most hard work.</p>
+        <p data-l="th">ผมไม่ได้ให้คะแนนตัวเอง แต่ละแถบคือจำนวนบทเรียน (จาก 172 บท) ที่เกี่ยวกับเครื่องมือนั้น แถบยาวคือที่ที่ผมลงแรงหนักที่สุด</p></header>
+      <div class="branch" style="--c:#f2b544">
         <h3><i></i>Commerce &amp; ERP</h3>
         <ul>
           <li class="skill" data-n="16"><span>Shopee</span><span class="bar" style="--v:.94"></span><span class="num">16</span></li>
@@ -303,7 +331,7 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
           <li class="skill" data-n="2"><span>Lazada</span><span class="bar" style="--v:.12"></span><span class="num">2</span></li>
         </ul>
       </div>
-      <div class="branch" style="--c:#8cc49a" data-branch="Data &amp; queues">
+      <div class="branch" style="--c:#8cc49a">
         <h3><i></i>Data &amp; queues</h3>
         <ul>
           <li class="skill" data-n="17"><span>MongoDB</span><span class="bar" style="--v:1"></span><span class="num">17</span></li>
@@ -313,7 +341,7 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
           <li class="skill" data-n="5"><span>Celery</span><span class="bar" style="--v:.29"></span><span class="num">5</span></li>
         </ul>
       </div>
-      <div class="branch" style="--c:#7fd6ff" data-branch="Backend">
+      <div class="branch" style="--c:#7fd6ff">
         <h3><i></i>Backend</h3>
         <ul>
           <li class="skill" data-n="9"><span>Go</span><span class="bar" style="--v:.53"></span><span class="num">9</span></li>
@@ -324,7 +352,7 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
           <li class="skill" data-n="4"><span>FastAPI</span><span class="bar" style="--v:.24"></span><span class="num">4</span></li>
         </ul>
       </div>
-      <div class="branch" style="--c:#a99bff" data-branch="AI &amp; agents">
+      <div class="branch" style="--c:#a99bff">
         <h3><i></i>AI &amp; agents</h3>
         <ul>
           <li class="skill" data-n="19"><span>Claude Code</span><span class="bar" style="--v:1"></span><span class="num">19</span></li>
@@ -335,7 +363,7 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
           <li class="skill" data-n="2"><span>Ollama</span><span class="bar" style="--v:.12"></span><span class="num">2</span></li>
         </ul>
       </div>
-      <div class="branch" style="--c:#ff7a8a" data-branch="Frontend">
+      <div class="branch" style="--c:#ff7a8a">
         <h3><i></i>Frontend</h3>
         <ul>
           <li class="skill" data-n="6"><span>TypeScript</span><span class="bar" style="--v:.35"></span><span class="num">6</span></li>
@@ -344,112 +372,127 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
           <li class="skill" data-n="1"><span>Three.js</span><span class="bar" style="--v:.06"></span><span class="num">1</span></li>
         </ul>
       </div>
-      <p class="footnote">Counted by Jacob, my Oracle, on 20 Oct 2026. A dashed bar is in use but not in the lesson log yet. Three.js gets +1 for this page.</p>
+      <p class="footnote" data-l="en">Counted by Jacob, my Oracle, on 20 Oct 2026. A dashed bar is in use but not in the lesson log yet. Three.js gets +1 for this page.</p>
+      <p class="footnote" data-l="th">Jacob (Oracle ของผม) นับไว้เมื่อ 20 ต.ค. 2026 แถบเส้นประคือใช้อยู่แต่ยังไม่มีในบันทึกบทเรียน ส่วน Three.js ได้ +1 จากหน้านี้</p>
     </section>
 
     <section class="panel" id="quests" data-zone="3">
-      <header><h2>Quest log</h2><p>Main quests run in production. Side quests are things I build because I want them to exist.</p></header>
+      <header><h2><span data-l="en">Quest log</span><span data-l="th">บันทึกเควสต์</span></h2>
+        <p data-l="en">Main quests run in production, so internal details are sealed under NDA. Ask me about them in person. Side quests are things I build because I want them to exist.</p>
+        <p data-l="th">เควสต์หลักรันอยู่บน production จริง รายละเอียดภายในจึงถูกปิดไว้ตาม NDA อยากรู้ถามผมตัวต่อตัวได้ ส่วน side quest คือของที่ผมสร้างเพราะอยากให้มันมีอยู่จริง</p></header>
       <ul class="quests">
         <li class="quest main" data-quest="0">
-          <span class="tier">Main quest</span>
-          <h3>Finance Management System</h3>
-          <p>Billing, reconciliation and finance documents from draft to approval and signature, with an editable timeline so every change has a history. Every bill links back to the order it came from.</p>
-          <ul class="tags"><li>Billing</li><li>ERPNext</li><li>Odoo</li><li>Audit trail</li></ul>
+          <span class="tier"><span data-l="en">Main quest</span><span data-l="th">เควสต์หลัก</span><span class="seal">NDA</span></span>
+          <h3><span data-l="en">Finance system</span><span data-l="th">ระบบการเงิน</span> <span class="rd" role="img" aria-label="redacted" style="--w:5em"></span></h3>
+          <p data-l="en">Billing, reconciliation and approval flow for finance documents, with a full audit trail. Every bill traces back to <span class="rd" role="img" aria-label="redacted" style="--w:6em"></span>.</p>
+          <p data-l="th">ระบบออกบิล กระทบยอด และ flow อนุมัติเอกสารการเงิน พร้อม audit trail ครบ ทุกบิลตรวจย้อนกลับไปหา <span class="rd" role="img" aria-label="ปิดไว้" style="--w:6em"></span> ได้</p>
+          <ul class="tags"><li>Billing</li><li>Audit trail</li><li class="rd" role="img" aria-label="redacted" style="--w:4em"></li></ul>
         </li>
         <li class="quest main" data-quest="1">
-          <span class="tier">Main quest</span>
-          <h3>Marketplace order pipeline</h3>
-          <p>Orders from Shopee, TikTok Shop, Shopify and Lazada arrive through webhooks and queues and land in the ERP. Includes fast-delivery routing, cut-off rules and handling marketplace rate limits.</p>
-          <ul class="tags"><li>RabbitMQ</li><li>MongoDB</li><li>Odoo</li><li>Webhooks</li></ul>
+          <span class="tier"><span data-l="en">Main quest</span><span data-l="th">เควสต์หลัก</span><span class="seal">NDA</span></span>
+          <h3><span data-l="en">Marketplace order pipeline</span><span data-l="th">ท่อออเดอร์จาก marketplace</span></h3>
+          <p data-l="en">Orders from <span class="rd" role="img" aria-label="redacted" style="--w:4em"></span> marketplaces arrive through webhooks and queues and land in the <span class="rd" role="img" aria-label="redacted" style="--w:3.5em"></span>. Routing, cut-off rules and rate limits included.</p>
+          <p data-l="th">ออเดอร์จาก <span class="rd" role="img" aria-label="ปิดไว้" style="--w:4em"></span> marketplace เข้ามาผ่าน webhook และ queue แล้วลงไปที่ <span class="rd" role="img" aria-label="ปิดไว้" style="--w:3.5em"></span> รวมถึง routing, กฎ cut-off และการรับมือ rate limit</p>
+          <ul class="tags"><li>Webhooks</li><li>Queues</li><li class="rd" role="img" aria-label="redacted" style="--w:3.5em"></li></ul>
         </li>
         <li class="quest main" data-quest="2">
-          <span class="tier">Main quest</span>
-          <h3>Product and stock sync</h3>
-          <p>One source of truth for product data and stock tags, shared by the order system and the ERP.</p>
-          <ul class="tags"><li>Data modelling</li><li>ERP</li></ul>
+          <span class="tier"><span data-l="en">Main quest</span><span data-l="th">เควสต์หลัก</span><span class="seal">NDA</span></span>
+          <h3><span data-l="en">Product and stock sync</span><span data-l="th">ซิงก์สินค้าและสต็อก</span></h3>
+          <p data-l="en">One source of truth for <span class="rd" role="img" aria-label="redacted" style="--w:4.5em"></span> shared between systems.</p>
+          <p data-l="th">แหล่งข้อมูลจริงหนึ่งเดียวของ <span class="rd" role="img" aria-label="ปิดไว้" style="--w:4.5em"></span> ที่หลายระบบใช้ร่วมกัน</p>
+          <ul class="tags"><li>Data modelling</li><li class="rd" role="img" aria-label="redacted" style="--w:3em"></li></ul>
         </li>
         <li class="quest side" data-quest="3">
-          <span class="tier">Side quest</span>
+          <span class="tier"><span data-l="en">Side quest</span><span data-l="th">เควสต์รอง</span></span>
           <h3>ห้องสื่อ Studio</h3>
-          <p>A builder for illustrated worksheets for young kids: live A4 preview, answer keys, PDF rendering, and AI help that runs on a local model.</p>
+          <p data-l="en">A builder for illustrated worksheets for young kids: live A4 preview, answer keys, PDF rendering, and AI help that runs on a local model.</p>
+          <p data-l="th">เครื่องมือสร้างใบงานมีภาพประกอบสำหรับเด็กเล็ก พรีวิว A4 สด มีเฉลย render เป็น PDF และมี AI ช่วยที่รันบนโมเดล local</p>
           <ul class="tags"><li>Nuxt</li><li>PDF</li><li>Ollama</li></ul>
         </li>
         <li class="quest side" data-quest="4">
-          <span class="tier">Side quest</span>
+          <span class="tier"><span data-l="en">Side quest</span><span data-l="th">เควสต์รอง</span></span>
           <h3>Iris Meetings</h3>
-          <p>Meet and Zoom calls are transcribed on my machine, summarised by Iris, and posted to Discord as notes with the full transcript.</p>
+          <p data-l="en">Meet and Zoom calls are transcribed on my machine, summarised by Iris, and posted to Discord as notes with the full transcript.</p>
+          <p data-l="th">ถอดเสียงประชุม Meet และ Zoom บนเครื่องตัวเอง ให้ Iris สรุป แล้วโพสต์ลง Discord เป็นโน้ตพร้อม transcript เต็ม</p>
           <ul class="tags"><li>Python stdlib</li><li>Local STT</li><li>Discord</li></ul>
         </li>
         <li class="quest side" data-quest="5">
-          <span class="tier">Side quest</span>
+          <span class="tier"><span data-l="en">Side quest</span><span data-l="th">เควสต์รอง</span></span>
           <h3>Oracle workflow</h3>
-          <p>A task record for my agent party: the brief, the pinned commit, each worker's git worktree, and the evidence review before anything counts as done.</p>
+          <p data-l="en">A task record for my agent party: the brief, the pinned commit, each worker's git worktree, and the evidence review before anything counts as done.</p>
+          <p data-l="th">ระบบบันทึกงานของปาร์ตี้ agent เก็บ brief, commit ที่ปักไว้, git worktree ของแต่ละตัว และการตรวจหลักฐานก่อนนับว่างานเสร็จ</p>
           <ul class="tags"><li>Git worktrees</li><li>Bun</li><li>Herdr</li></ul>
         </li>
       </ul>
     </section>
 
     <section class="panel" id="party" data-zone="4">
-      <header><h2>Party</h2><p>I don't play solo. Select a member to see them in the world.</p></header>
+      <header><h2><span data-l="en">Party</span><span data-l="th">ปาร์ตี้</span></h2>
+        <p data-l="en">I don't play solo. Select a member to see them in the world.</p>
+        <p data-l="th">ผมไม่เล่นเดี่ยว เลือกสมาชิกเพื่อดูตัวจริงในโลก 3D</p></header>
       <ul class="party">
         <li><button class="member" data-agent="jacob" style="--c:#a99bff;--shape:polygon(50% 0,100% 100%,0 100%)">
           <span class="sig"></span>
-          <span class="h">Jacob Oracle <small>Archivist and project manager</small></span>
-          <span class="d">My external brain. Keeps every session note and lesson, never deletes anything, and manages the dev squad's task queue.</span>
-          <span class="ability">Ability: Nothing is Deleted</span>
+          <span class="h">Jacob Oracle <small><span data-l="en">Archivist and project manager</span><span data-l="th">ผู้เก็บบันทึกและ PM</span></small></span>
+          <span class="d"><span data-l="en">My external brain. Keeps every session note and lesson, never deletes anything, and manages the dev squad's task queue.</span><span data-l="th">สมองภายนอกของผม เก็บโน้ตทุก session และทุกบทเรียน ไม่ลบอะไรเลย และดูแลคิวงานของทีม dev</span></span>
+          <span class="ability"><span data-l="en">Ability: Nothing is Deleted</span><span data-l="th">ความสามารถ: ไม่มีอะไรถูกลบ</span></span>
         </button></li>
         <li><button class="member" data-agent="iris" style="--c:#7fd6ff;--shape:circle(50%)">
           <span class="sig" style="background:var(--spectrum)"></span>
-          <span class="h">Iris Oracle <small>Guide and dev companion</small></span>
-          <span class="d">Moves between repos with me and carries context from one to the next. Leads the durian squad and writes my meeting notes.</span>
-          <span class="ability">Ability: Aperture focus</span>
+          <span class="h">Iris Oracle <small><span data-l="en">Guide and dev companion</span><span data-l="th">ผู้นำทางและคู่หู dev</span></small></span>
+          <span class="d"><span data-l="en">Moves between repos with me and carries context from one to the next. Leads the durian squad and writes my meeting notes.</span><span data-l="th">ย้าย repo ไปพร้อมผมและพา context ข้ามไปด้วย นำทีม durian squad และจดโน้ตประชุมให้</span></span>
+          <span class="ability"><span data-l="en">Ability: Aperture focus</span><span data-l="th">ความสามารถ: ปรับโฟกัสม่านตา</span></span>
         </button></li>
         <li><button class="member" data-agent="reina" style="--c:#ff7a8a;--shape:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)">
           <span class="sig"></span>
-          <span class="h">Reina 怜奈 <small>Night watch</small></span>
-          <span class="d">Runs on a Hermes gateway around the clock on Slack, Telegram and Discord. Flags new error patterns as they appear and sends a summary at 9 every morning.</span>
-          <span class="ability">Ability: Never logs off</span>
+          <span class="h">Reina 怜奈 <small><span data-l="en">Night watch</span><span data-l="th">ยามกะดึก</span></small></span>
+          <span class="d"><span data-l="en">Runs on a Hermes gateway around the clock on Slack, Telegram and Discord. Flags new error patterns as they appear and sends a summary every morning.</span><span data-l="th">อยู่บน Hermes gateway ตลอด 24 ชม. ทั้ง Slack, Telegram และ Discord เตือนทันทีเมื่อเจอ error รูปแบบใหม่ และส่งสรุปทุกเช้า</span></span>
+          <span class="ability"><span data-l="en">Ability: Never logs off</span><span data-l="th">ความสามารถ: ไม่เคยออฟไลน์</span></span>
         </button></li>
         <li><button class="member" data-agent="squad" style="--c:#f2b544;--shape:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)">
           <span class="sig"></span>
-          <span class="h">Durian squad <small>Coder, security, requirements analyst</small></span>
-          <span class="d">A specialist team for the finance backend. Iris leads them in the field and Jacob manages their queue.</span>
-          <span class="ability">Ability: Three-way review</span>
+          <span class="h">Durian squad <small><span data-l="en">Coder, security, requirements analyst</span><span data-l="th">coder, security, requirements analyst</span></small></span>
+          <span class="d"><span data-l="en">A specialist team for backend work. Iris leads them in the field and Jacob manages their queue.</span><span data-l="th">ทีมเฉพาะทางสำหรับงาน backend Iris นำทีมภาคสนาม Jacob จัดคิวงาน</span></span>
+          <span class="ability"><span data-l="en">Ability: Three-way review</span><span data-l="th">ความสามารถ: รีวิวสามทาง</span></span>
         </button></li>
         <li><button class="member" data-agent="codex" style="--c:#8cc49a;--shape:inset(8%)">
           <span class="sig"></span>
-          <span class="h">Codex workers <small>Builders</small></span>
-          <span class="d">Each one gets its own git worktree and a written brief. A finished dispatch isn't finished work: Jacob checks the evidence first.</span>
-          <span class="ability">Ability: Parallel build</span>
+          <span class="h">Codex workers <small><span data-l="en">Builders</span><span data-l="th">ช่างสร้าง</span></small></span>
+          <span class="d"><span data-l="en">Each one gets its own git worktree and a written brief. A finished dispatch isn't finished work: Jacob checks the evidence first.</span><span data-l="th">แต่ละตัวได้ git worktree ของตัวเองพร้อม brief ส่งงานกลับมาแล้วยังไม่ถือว่าเสร็จ จนกว่า Jacob จะตรวจหลักฐาน</span></span>
+          <span class="ability"><span data-l="en">Ability: Parallel build</span><span data-l="th">ความสามารถ: สร้างคู่ขนาน</span></span>
         </button></li>
       </ul>
       <div class="rules">
-        <b>Party rules</b>
-        <span>Agents show me options and patterns. I make the decisions.</span>
-        <span>A mirror doesn't pretend to be a person: anything an agent writes in public is signed.</span>
+        <b><span data-l="en">Party rules</span><span data-l="th">กฎของปาร์ตี้</span></b>
+        <span data-l="en">Agents show me options and patterns. I make the decisions.</span>
+        <span data-l="th">agents เสนอทางเลือกและ pattern ให้ ส่วนคนตัดสินใจคือผม</span>
+        <span data-l="en">A mirror doesn't pretend to be a person: anything an agent writes in public is signed.</span>
+        <span data-l="th">กระจกไม่แกล้งเป็นคน อะไรที่ agent เขียนในที่สาธารณะต้องลงชื่อเสมอ</span>
       </div>
     </section>
 
     <section class="panel" id="save" data-zone="5">
-      <header><h2>Save point</h2><p>Want to team up on a quest? Send a message.</p></header>
+      <header><h2><span data-l="en">Save point</span><span data-l="th">จุดเซฟ</span></h2>
+        <p data-l="en">Want to team up on a quest? Send a message.</p>
+        <p data-l="th">อยากร่วมเควสต์ด้วยกัน ทักมาได้เลย</p></header>
       <ul class="links">
         <li><span>GitHub</span><a href="https://github.com/ford-zii">github.com/ford-zii</a></li>
-        <li><span>Email</span><div><code id="email">shissanupong@outlook.com</code><br><button class="btn copy" id="copy" type="button">Copy email</button></div></li>
-        <li><span>Old save</span><a href="2018/">The 2018 version of this site</a></li>
+        <li><span><span data-l="en">Email</span><span data-l="th">อีเมล</span></span><div><code id="email">shissanupong@outlook.com</code><br><button class="btn copy" id="copy" type="button"><span data-l="en">Copy email</span><span data-l="th">คัดลอกอีเมล</span></button></div></li>
+        <li><span><span data-l="en">Old save</span><span data-l="th">เซฟเก่า</span></span><a href="2018/"><span data-l="en">The 2018 version of this site</span><span data-l="th">เว็บนี้เวอร์ชันปี 2018</span></a></li>
       </ul>
-      <p class="sign">🤖 Built by jacob-oracle for [Ford] → oracle. The 3D world is drawn in code with Three.js.</p>
+      <p class="sign">🤖 <span data-l="en">Built by jacob-oracle for [Ford] → oracle. The 3D world is drawn in code with Three.js.</span><span data-l="th">สร้างโดย jacob-oracle จาก [Ford] → oracle โลก 3D วาดด้วยโค้ด Three.js</span></p>
     </section>
 
   </div>
 
-  <div class="dialogue" id="dialogue" aria-label="Iris, your guide">
+  <div class="dialogue" id="dialogue" aria-label="Iris">
     <span class="portrait" aria-hidden="true"></span>
-    <p class="speaker">Iris <small>guide</small></p>
+    <p class="speaker">Iris <small><span data-l="en">guide</span><span data-l="th">ผู้นำทาง</span></small></p>
     <p class="line"><span id="typed" aria-hidden="true"></span><span class="caret" aria-hidden="true"></span><span class="sr" id="said" aria-live="polite"></span></p>
     <div class="controls">
-      <span class="hint">← → or 1–6 to travel</span>
-      <button class="btn" id="back" type="button">Back</button>
-      <button class="btn" id="next" type="button">Next</button>
+      <span class="hint"><span data-l="en">← → or 1–6 to travel</span><span data-l="th">← → หรือ 1–6 เพื่อเดินทาง</span></span>
+      <button class="btn" id="back" type="button"><span data-l="en">Back</span><span data-l="th">ย้อน</span></button>
+      <button class="btn" id="next" type="button"></button>
     </div>
   </div>
 </main>
@@ -473,26 +516,53 @@ const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const HASH = ['start', 'player', 'skills', 'quests', 'party', 'save'];
 
+const L = (en, th) => ({ en, th });
 const LINES = [
-  "Hi, I'm Iris, Ford's dev companion. I carry context between his repos, so I'll carry you through his save file. Press Next or use the arrow keys to follow me.",
-  "This is Ford. He builds the money paths at Opendurian: orders in, bills out, every baht accounted for. Those stats come from his memory log, not a guess.",
-  "These are his skill branches. He didn't rate himself, Jacob counted. The brightest stars are the tools behind the most hard-won lessons.",
-  "His quest log. The gold tablets run in production right now. The green ones are side quests he built because he wanted them to exist.",
-  "Ford doesn't solo. Jacob keeps the memory, Reina keeps watch overnight, the durian squad and Codex build, and I keep things in focus. Ford still makes every call. Tap one of us.",
-  "Save point. If you want to start a co-op quest with Ford, his contacts are here. Thanks for walking the orchard with me."
+  L("Hi, I'm Iris, Ford's dev companion. I carry context between his repos, so I'll carry you through his save file. Press Next or use the arrow keys to follow me.",
+    "สวัสดี เราคือ Iris คู่หู dev ของ Ford ปกติเราพา context ข้าม repo ไปมา วันนี้จะพาเดินดู save file ของ Ford เอง กด Next หรือปุ่มลูกศรแล้วตามมาเลย"),
+  L("This is Ford. He builds the money paths at Opendurian: orders in, bills out, every baht accounted for. Those stats come from his memory log, not a guess.",
+    "นี่คือ Ford เขาสร้างเส้นทางของเงินที่ Opendurian ออเดอร์เข้า บิลออก ทุกบาทตรวจย้อนได้ ตัวเลขพวกนี้มาจาก memory log ของเขา ไม่ได้เดา"),
+  L("These are his skill branches. He didn't rate himself, Jacob counted. The brightest stars are the tools behind the most hard-won lessons.",
+    "นี่คือกิ่งสกิล Ford ไม่ได้ให้คะแนนตัวเอง Jacob เป็นคนนับ ดาวที่สว่างที่สุดคือเครื่องมือที่อยู่เบื้องหลังบทเรียนที่ได้มายากที่สุด"),
+  L("His quest log. The gold tablets are live production work, so the sensitive parts are sealed under NDA. Ask Ford in person. The green ones are side quests he built for fun.",
+    "บันทึกเควสต์ แผ่นสีทองคืองานบน production จริง ส่วนที่ sensitive เลยถูกซีลไว้ตาม NDA อยากรู้ต้องถาม Ford เอง แผ่นสีเขียวคือ side quest ที่เขาทำเพราะอยากทำ"),
+  L("Ford doesn't solo. Jacob keeps the memory, Reina keeps watch overnight, the durian squad and Codex build, and I keep things in focus. Ford still makes every call. Tap one of us.",
+    "Ford ไม่เล่นเดี่ยว Jacob ดูแลความจำ Reina เฝ้าระบบทั้งคืน durian squad กับ Codex ลงมือสร้าง ส่วนเราช่วยโฟกัส แต่คนตัดสินใจทุกเรื่องคือ Ford ลองแตะพวกเราดูสิ"),
+  L("Save point. If you want to start a co-op quest with Ford, his contacts are here. Thanks for walking the orchard with me.",
+    "จุดเซฟ ถ้าอยากเริ่มเควสต์ co-op กับ Ford ช่องทางติดต่ออยู่ตรงนี้ ขอบคุณที่มาเดินสวนด้วยกันนะ")
 ];
 const AGENT_LINES = {
-  jacob: "Jacob, my older brother. Named after Jacob's Ladder, the flower and the stairway. He's never deleted a note, he only grows new rings.",
-  iris: "That's me. An iris lets in just enough light to bring things into focus. I do the same with context.",
-  reina: "Reina, our little sister. She lives in the gateway, so she doesn't start fresh every session like Jacob and me. She's always on watch.",
-  squad: "The durian squad: coder, security and requirements analyst. Spiky on the outside, careful on the inside.",
-  codex: "Codex workers each build in their own worktree. Ford's rule is that a dispatch only counts once the evidence is checked."
+  jacob: L("Jacob, my older brother. Named after Jacob's Ladder, the flower and the stairway. He's never deleted a note, he only grows new rings.",
+    "Jacob พี่ใหญ่ของเรา ตั้งชื่อตาม Jacob's Ladder ทั้งดอกไม้และบันไดสู่ฟ้า ไม่เคยลบโน้ตสักอัน มีแต่โตเป็นวงปีใหม่"),
+  iris: L("That's me. An iris lets in just enough light to bring things into focus. I do the same with context.",
+    "นั่นคือเราเอง ม่านตารับแสงแค่พอดีให้ภาพชัด เราทำแบบเดียวกันกับ context"),
+  reina: L("Reina, our little sister. She lives in the gateway, so she doesn't start fresh every session like Jacob and me. She's always on watch.",
+    "Reina น้องเล็กของบ้าน อยู่ใน gateway เลยไม่ต้องเริ่มใหม่ทุก session เหมือนเรากับ Jacob เธอเฝ้าระบบอยู่ตลอด"),
+  squad: L("The durian squad: coder, security and requirements analyst. Spiky on the outside, careful on the inside.",
+    "Durian squad มี coder, security และ requirements analyst ข้างนอกมีหนาม ข้างในละเอียด"),
+  codex: L("Codex workers each build in their own worktree. Ford's rule is that a dispatch only counts once the evidence is checked.",
+    "Codex แต่ละตัวสร้างงานใน worktree ของตัวเอง กฎของ Ford คือส่งงานแล้วยังไม่นับว่าเสร็จ จนกว่าจะตรวจหลักฐาน")
 };
+
+/* ---------------- Language ---------------- */
+let lang = 'en';
+try { lang = localStorage.getItem('lang') || (navigator.language.startsWith('th') ? 'th' : 'en'); } catch {}
+const t = (en, th) => lang === 'th' ? th : en;
+let lastLine = LINES[0];
+function setLang(l) {
+  lang = l; document.documentElement.lang = l;
+  try { localStorage.setItem('lang', l); } catch {}
+  $('#mode').textContent = document.body.classList.contains('doc') ? t('Game mode', 'โหมดเกม') : t('Plain resume', 'เรซูเม่แบบอ่านง่าย');
+  $('#next').textContent = zone === HASH.length - 1 ? t('Start over', 'เริ่มใหม่') : t('Next', 'ต่อไป');
+  say(lastLine);
+}
 
 /* ---------------- Guide + zone state ---------------- */
 let zone = 0, typer = 0, full = '';
 const typed = $('#typed'), said = $('#said'), dlg = $('#dialogue');
-function say(text) {
+function say(line) {
+  lastLine = line;
+  const text = line[lang];
   full = text; said.textContent = text; clearInterval(typer);
   if (reduced) { typed.textContent = text; return; }
   let i = 0; typed.textContent = ''; dlg.classList.add('talking');
@@ -510,7 +580,7 @@ function go(n, { line } = {}) {
   $$('.zones button').forEach(b => b.setAttribute('aria-current', +b.dataset.go === zone ? 'step' : 'false'));
   $('#panels').scrollTop = 0;
   $('#back').disabled = zone === 0;
-  $('#next').textContent = zone === HASH.length - 1 ? 'Start over' : 'Next';
+  $('#next').textContent = zone === HASH.length - 1 ? t('Start over', 'เริ่มใหม่') : t('Next', 'ต่อไป');
   say(line || LINES[zone]);
   world?.fly(zone);
   try { history.replaceState(null, '', '#' + HASH[zone]); } catch {}
@@ -533,16 +603,17 @@ $('#next').addEventListener('click', e => { e.stopPropagation(); typing() ? fini
 $('#back').addEventListener('click', e => { e.stopPropagation(); go(zone - 1); });
 dlg.addEventListener('click', () => typing() ? finishTyping() : go(zone + 1));
 $$('.member').forEach(m => m.addEventListener('click', () => select(m.dataset.agent)));
+$('#lang').addEventListener('click', () => setLang(lang === 'en' ? 'th' : 'en'));
 $('#mode').addEventListener('click', () => {
   const doc = document.body.classList.toggle('doc');
-  $('#mode').textContent = doc ? 'Game mode' : 'Plain resume';
+  $('#mode').textContent = doc ? t('Game mode', 'โหมดเกม') : t('Plain resume', 'เรซูเม่แบบอ่านง่าย');
   world?.idle(doc);
 });
 $('#copy').addEventListener('click', async () => {
-  const btn = $('#copy');
-  try { await navigator.clipboard.writeText($('#email').textContent); btn.textContent = 'Email copied'; }
-  catch { getSelection().selectAllChildren($('#email')); btn.textContent = 'Selected, press Ctrl+C'; }
-  setTimeout(() => (btn.textContent = 'Copy email'), 2000);
+  const btn = $('#copy'), was = btn.innerHTML;
+  try { await navigator.clipboard.writeText($('#email').textContent); btn.textContent = t('Email copied', 'คัดลอกแล้ว'); }
+  catch { getSelection().selectAllChildren($('#email')); btn.textContent = t('Selected, press Ctrl+C', 'เลือกไว้แล้ว กด Ctrl+C'); }
+  setTimeout(() => (btn.innerHTML = was), 2000);
 });
 addEventListener('keydown', e => {
   if (document.body.classList.contains('doc') || e.target.closest('input,textarea')) return;
@@ -551,6 +622,7 @@ addEventListener('keydown', e => {
   else if (/^[1-6]$/.test(e.key)) go(+e.key - 1);
 });
 go(Math.max(0, HASH.indexOf(location.hash.slice(1))));
+setLang(lang);
 
 function buildWorld(canvas) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
