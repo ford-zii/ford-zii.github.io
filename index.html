@@ -174,6 +174,9 @@ html[lang="en"] #lang [data-on="en"], html[lang="th"] #lang [data-on="th"] { opa
   font: 700 .7rem/1 var(--f-display); letter-spacing: .06em; color: var(--lantern); border: 1.5px solid currentColor;
 }
 
+.motto { margin: 0; padding: 12px 14px; border: 1px solid var(--line); display: grid; gap: 4px; background: color-mix(in oklab, var(--sap) 7%, transparent); }
+.motto b { font: 600 .82rem/1 var(--f-display); color: var(--sap); }
+.starter .tags li { color: var(--ink); }
 /* Level history */
 .timeline { list-style: none; margin: 0; padding: 0 0 0 18px; border-left: 2px solid var(--line); display: grid; gap: 14px; }
 .timeline li { position: relative; display: grid; gap: 2px; }
@@ -361,10 +364,13 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
       <dl class="kv">
         <dt><span data-l="en">Class</span><span data-l="th">อาชีพ</span></dt><dd>Senior software engineer</dd>
         <dt><span data-l="en">Guild</span><span data-l="th">กิลด์</span></dt><dd>Opendurian</dd>
-        <dt><span data-l="en">Origin</span><span data-l="th">ที่มา</span></dt><dd><span data-l="en">Software Engineering, University of Phayao</span><span data-l="th">วิศวกรรมซอฟต์แวร์ มหาวิทยาลัยพะเยา</span></dd>
-        <dt><span data-l="en">Region</span><span data-l="th">ภูมิภาค</span></dt><dd><span data-l="en">Thailand</span><span data-l="th">ประเทศไทย</span></dd>
+        <dt><span data-l="en">Education</span><span data-l="th">การศึกษา</span></dt><dd><span data-l="en">Software Engineering, University of Phayao (2017–2021)</span><span data-l="th">วิศวกรรมซอฟต์แวร์ มหาวิทยาลัยพะเยา (2017–2021)</span></dd>
+        <dt><span data-l="en">Certified</span><span data-l="th">ใบรับรอง</span></dt><dd>ITPE Level IP (2019), CSBA Level 3 (2020)</dd>
+        <dt><span data-l="en">In tech since</span><span data-l="th">อยู่สายไอทีตั้งแต่</span></dt><dd>2011</dd>
+        <dt><span data-l="en">Hometown</span><span data-l="th">บ้านเกิด</span></dt><dd><span data-l="en">Kamphaeng Phet, Thailand</span><span data-l="th">กำแพงเพชร</span></dd>
         <dt><span data-l="en">Languages</span><span data-l="th">ภาษา</span></dt><dd><span data-l="en">Thai, English</span><span data-l="th">ไทย อังกฤษ</span></dd>
       </dl>
+      <blockquote class="motto"><b><span data-l="en">Life quest</span><span data-l="th">เควสต์ชีวิต</span></b><span data-l="en">Grow from student to employee to entrepreneur, and develop myself, my family, community, society, country and world for the benefit of everyone.</span><span data-l="th">เติบโตจากนักเรียน สู่พนักงาน สู่ผู้ประกอบการ เพื่อพัฒนาตัวเอง ครอบครัว ชุมชน สังคม ประเทศ และโลก ให้เกิดประโยชน์สูงสุดแก่ทุกคน</span></blockquote>
       <h3><span data-l="en">Achievements</span><span data-l="th">ความสำเร็จ</span></h3>
       <ul class="badges">
         <li style="--c:#a99bff"><i></i><b><span data-l="en">Memory palace</span><span data-l="th">วังแห่งความจำ</span></b><span data-l="en">173 lessons, 580 retros and 224 handoffs in three months.</span><span data-l="th">บทเรียน 173, retro 580 และ handoff 224 ภายในสามเดือน</span></li>
@@ -452,18 +458,28 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
           <li class="skill" data-n="1"><span>Three.js</span><span class="bar" style="--v:.06"></span><span class="num">1</span></li>
         </ul>
       </div>
+      <div class="branch starter">
+        <h3><span data-l="en">Starter kit</span><span data-l="th">อุปกรณ์เริ่มต้น</span></h3>
+        <p class="footnote"><span data-l="en">From my 2021 resume, before the lesson log existed.</span><span data-l="th">จาก resume ปี 2021 ก่อนจะมีบันทึกบทเรียน</span></p>
+        <ul class="tags"><li>Angular</li><li>Vue</li><li>Django REST</li><li>Spring Boot</li><li>Git</li><li>Linux</li><li>Photoshop</li><li>Premiere</li></ul>
+      </div>
       <p class="footnote" data-l="en">Counted by Jacob, my Oracle, on 20 Oct 2026. A dashed bar is in use but not in the lesson log yet. Three.js gets +1 for this page.</p>
       <p class="footnote" data-l="th">Jacob (Oracle ของผม) นับไว้เมื่อ 20 ต.ค. 2026 แถบเส้นประคือใช้อยู่แต่ยังไม่มีในบันทึกบทเรียน ส่วน Three.js ได้ +1 จากหน้านี้</p>
     </section>
 
     <section class="panel" id="log" data-zone="3">
       <header><h2><span data-l="en">Level history</span><span data-l="th">เส้นทางเลเวล</span></h2>
-        <p data-l="en">One rung per milestone. Most of the climb happened after the party formed in July 2026.</p>
-        <p data-l="th">หนึ่งขั้นบันไดต่อหนึ่ง milestone ส่วนใหญ่ไต่ขึ้นมาหลังจากตั้งปาร์ตี้เมื่อกรกฎาคม 2026</p></header>
+        <p data-l="en">From fixing computers in 2011 to senior engineer, one rung per milestone.</p>
+        <p data-l="th">จากช่างซ่อมคอมปี 2011 สู่ senior engineer หนึ่งขั้นบันไดต่อหนึ่ง milestone</p></header>
       <ol class="timeline">
-        <li><time><span data-l="en">Origin</span><span data-l="th">จุดเริ่ม</span></time><b><span data-l="en">Software Engineering, University of Phayao</span><span data-l="th">วิศวกรรมซอฟต์แวร์ มหาวิทยาลัยพะเยา</span></b></li>
+        <li><time>2011–2016</time><b><span data-l="en">IT support technician, Advice Khlong Lan</span><span data-l="th">ช่างเทคนิคไอที Advice คลองลาน</span></b><span data-l="en">Installed, repaired and upgraded hardware and software, rolled out antivirus, tested new kit. Where the debugging habit started.</span><span data-l="th">ติดตั้ง ซ่อม อัปเกรดฮาร์ดแวร์และซอฟต์แวร์ ลงแอนตี้ไวรัส ทดสอบอุปกรณ์ใหม่ จุดเริ่มต้นของนิสัยไล่หาต้นเหตุ</span></li>
+        <li><time>2014–2016</time><b><span data-l="en">Science–Math track, Khlong Lan Wittaya School</span><span data-l="th">สายวิทย์–คณิต โรงเรียนคลองลานวิทยา</span></b></li>
+        <li><time>2017–2021</time><b><span data-l="en">Software Engineering, University of Phayao</span><span data-l="th">วิศวกรรมซอฟต์แวร์ มหาวิทยาลัยพะเยา</span></b></li>
         <li><time>2018</time><b><span data-l="en">First personal site, Ford'Zii</span><span data-l="th">เว็บส่วนตัวเว็บแรก Ford'Zii</span></b><span data-l="en">Still saved under /2018.</span><span data-l="th">ยังเก็บไว้ที่ /2018</span></li>
-        <li><time><span data-l="en">Joined</span><span data-l="th">เข้ากิลด์</span></time><b>Opendurian</b><span data-l="en">Order, billing and finance systems for a commerce business.</span><span data-l="th">ระบบออเดอร์ บิล และการเงินของธุรกิจคอมเมิร์ซ</span></li>
+        <li><time>2019</time><b><span data-l="en">ITPE certified, Level IP</span><span data-l="th">ผ่าน ITPE ระดับ IP</span></b><span data-l="en">IT Passport Examination, NSTDA.</span><span data-l="th">IT Passport Examination โดย สวทช.</span></li>
+        <li><time>2020</time><b><span data-l="en">CSBA certified, Level 3</span><span data-l="th">ผ่าน CSBA ระดับ 3</span></b><span data-l="en">Certified Software Business Analyst, Software Industry Promotion Agency.</span><span data-l="th">Certified Software Business Analyst โดยสำนักงานส่งเสริมอุตสาหกรรมซอฟต์แวร์แห่งชาติ</span></li>
+        <li><time>2021</time><b><span data-l="en">Software developer, Soft Square 1999</span><span data-l="th">Software developer ที่ Soft Square 1999</span></b><span data-l="en">Part of Soft Square Group. Front-end and back-end web apps, API design, responsive UI, working with graphic designers.</span><span data-l="th">บริษัทในเครือ Soft Square Group ทำเว็บทั้ง front-end และ back-end ออกแบบ API ทำ UI ให้ responsive และทำงานร่วมกับ graphic designer</span></li>
+        <li><time><span data-l="en">Then</span><span data-l="th">ต่อมา</span></time><b><span data-l="en">Joined Opendurian</span><span data-l="th">เข้าร่วม Opendurian</span></b><span data-l="en">Order, billing and finance systems for a commerce business.</span><span data-l="th">ระบบออเดอร์ บิล และการเงินของธุรกิจคอมเมิร์ซ</span></li>
         <li><time>2026-07-20</time><b><span data-l="en">Jacob Oracle awakens</span><span data-l="th">Jacob Oracle ตื่นขึ้น</span></b><span data-l="en">An external brain that writes down every session.</span><span data-l="th">สมองภายนอกที่จดทุก session</span></li>
         <li><time>2026-07-22</time><b><span data-l="en">Iris is born</span><span data-l="th">Iris ถือกำเนิด</span></b><span data-l="en">A dev companion that moves between repos.</span><span data-l="th">คู่หู dev ที่ย้าย repo ไปด้วยกัน</span></li>
         <li><time>2026-07-27</time><b><span data-l="en">Jacob becomes PM</span><span data-l="th">Jacob รับตำแหน่ง PM</span></b><span data-l="en">Runs the queue for a three-agent dev squad.</span><span data-l="th">ดูแลคิวงานของทีม dev ที่มี agent 3 ตัว</span></li>
@@ -696,7 +712,7 @@ body.game.doc .dialogue, body.game.doc .zones { display: none; }
       <ul class="links">
         <li><span>LinkedIn</span><a href="https://www.linkedin.com/in/chissanupong-promon-867462208/">chissanupong-promon</a></li>
         <li><span>GitHub</span><a href="https://github.com/ford-zii">github.com/ford-zii</a></li>
-        <li><span><span data-l="en">Email</span><span data-l="th">อีเมล</span></span><div><code id="email">shissanupong@outlook.com</code><br><button class="btn copy" id="copy" type="button"><span data-l="en">Copy email</span><span data-l="th">คัดลอกอีเมล</span></button></div></li>
+        <li><span><span data-l="en">Email</span><span data-l="th">อีเมล</span></span><div><code id="email">ford19982541@gmail.com</code><br><button class="btn copy" id="copy" type="button"><span data-l="en">Copy email</span><span data-l="th">คัดลอกอีเมล</span></button></div></li>
         <li><span><span data-l="en">Old save</span><span data-l="th">เซฟเก่า</span></span><a href="2018/"><span data-l="en">The 2018 version of this site</span><span data-l="th">เว็บนี้เวอร์ชันปี 2018</span></a></li>
       </ul>
       <p class="sign">🤖 <span data-l="en">Built by jacob-oracle for [Ford] → oracle. The 3D world is drawn in code with Three.js.</span><span data-l="th">สร้างโดย jacob-oracle จาก [Ford] → oracle โลก 3D วาดด้วยโค้ด Three.js</span></p>
@@ -745,8 +761,8 @@ const LINES = [
     "นี่คือ Ford เขาสร้างเส้นทางของเงินที่ Opendurian ออเดอร์เข้า บิลออก ทุกบาทตรวจย้อนได้ ตัวเลขพวกนี้มาจาก memory log ของเขา ไม่ได้เดา"),
   L("These are his skill branches. He didn't rate himself, Jacob counted. The brightest stars are the tools behind the most hard-won lessons.",
     "นี่คือกิ่งสกิล Ford ไม่ได้ให้คะแนนตัวเอง Jacob เป็นคนนับ ดาวที่สว่างที่สุดคือเครื่องมือที่อยู่เบื้องหลังบทเรียนที่ได้มายากที่สุด"),
-  L("Level history. Jacob's ladder grows one rung per milestone. Most of the climb happened after the party formed in July.",
-    "เส้นทางเลเวล บันไดของ Jacob โตขึ้นหนึ่งขั้นต่อหนึ่ง milestone ส่วนใหญ่ไต่ขึ้นมาหลังตั้งปาร์ตี้เมื่อกรกฎาคม"),
+  L("Level history. Ford started out fixing computers in Khlong Lan in 2011 and climbed from there. Jacob's ladder grows one rung per milestone.",
+    "เส้นทางเลเวล Ford เริ่มจากซ่อมคอมที่คลองลานเมื่อปี 2011 แล้วไต่ขึ้นมาเรื่อยๆ บันไดของ Jacob โตขึ้นหนึ่งขั้นต่อหนึ่ง milestone"),
   L("Boss battles. Every one of these hit production, and every one is down. Open a card to see how Ford found the root cause. The worst one stays sealed.",
     "ห้องบอส ทุกตัวเคยโจมตี production จริง และถูกปราบหมดแล้ว เปิดการ์ดดูได้ว่า Ford หา root cause เจอได้ยังไง ตัวที่หนักที่สุดยังถูกซีลไว้"),
   L("His quest log. The gold tablets are live production work, so the sensitive parts are sealed under NDA. Ask Ford in person. The green ones are side quests he built for fun.",
@@ -1029,15 +1045,15 @@ function buildWorld(canvas) {
   // --- Level history: Jacob's ladder spiral, one step per milestone
   const log = new THREE.Group(); log.position.copy(P.log); scene.add(log); log.userData.zone = 3; pickable.push(log);
   log.add(mesh(new THREE.CylinderGeometry(.05, .08, 5, 6), std(0x4f7d5c), 0, 2.5, 0));
-  const steps = $$('.timeline li');
+  const steps = $$('.timeline li'), rise = 4.4 / steps.length;
   steps.forEach((li, i) => {
-    const a = i * .62, y = .25 + i * .36, now = li.classList.contains('now');
+    const a = i * .62, y = .25 + i * rise, now = li.classList.contains('now');
     const step = mesh(new THREE.BoxGeometry(.95, .07, .34), now ? glow(SAP, 1.2) : trim, Math.cos(a) * .55, y, Math.sin(a) * .55);
     step.rotation.y = -a; log.add(step);
     const bead = mesh(new THREE.IcosahedronGeometry(now ? .16 : .07, 0), glow(now ? SAP : (i < 3 ? SKY : LEAF), now ? 3 : 1.8), Math.cos(a) * 1.05, y + .12, Math.sin(a) * 1.05);
     bead.userData.phase = i; log.add(bead); nodes.push(bead);
   });
-  const crown = new THREE.Group(); crown.position.y = .25 + steps.length * .36 + .3; log.add(crown);
+  const crown = new THREE.Group(); crown.position.y = .25 + steps.length * rise + .3; log.add(crown);
   for (let i = 0; i < 5; i++) { const pt = mesh(new THREE.SphereGeometry(.2, 8, 6), glow(PETAL, 1.5), Math.cos(i * 1.2566) * .24, 0, Math.sin(i * 1.2566) * .24); pt.scale.set(1, .45, 1); crown.add(pt); }
   tickers.push(t => { log.rotation.y = Math.sin(t * .2) * .25; crown.rotation.y = t * .4; });
 
