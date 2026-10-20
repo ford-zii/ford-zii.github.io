@@ -1,161 +1,845 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <title>Ford'Zii</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
-  <link rel="stylesheet" href="css/modifine.css">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
-  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
-  <script src="js/jquery.min.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-</head>
-<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
-  <!-- Nevbar -->
-  <nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-          <span class="icon-bar"></span>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ford Chissanupong</title>
+<meta name="description" content="Ford Chissanupong Prom-on: full-stack engineer for finance and commerce systems, playing with a party of AI agents.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600&display=swap">
+<style>
+/* Layout: a night orchard world fills the screen; one notched console (panel + Iris's dialogue)
+   docks right on desktop and becomes a bottom sheet on phones. Without JS it reads as a plain document. */
+@property --r { syntax: "<length>"; inherits: false; initial-value: 0px; }
+:root {
+  --night: #0b1714;
+  --moss: #13281f;
+  --line: #29483d;
+  --ink: #e6eee8;
+  --dim: #97ada3;
+  --sap: #f2b544;
+  --leaf: #8cc49a;
+  --petal: #a99bff;
+  --lantern: #ff7a8a;
+  --spectrum: conic-gradient(from 20deg, #ff8fa3, #ffc46b, #a6e38b, #7fd6ff, #b59bff, #ff8fa3);
+  --f-display: "Chakra Petch", "Bai Jamjuree", ui-sans-serif, system-ui, sans-serif;
+  --f-body: "IBM Plex Sans Thai", "Noto Sans Thai", ui-sans-serif, system-ui, sans-serif;
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-move: cubic-bezier(.65, 0, .35, 1);
+  --notch: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 14px 100%, 0 calc(100% - 14px));
+  --deck-w: min(460px, 42vw);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  background: var(--night);
+  color: var(--ink);
+  font: 400 15px/1.6 var(--f-body);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+a { color: var(--sap); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--sap); outline-offset: 3px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h2 { font-size: 1.55rem; font-weight: 700; }
+h3 { font-size: 1.05rem; font-weight: 600; }
+p { margin: 0; }
+ul { margin: 0; padding: 0; list-style: none; }
+.num { font-family: var(--f-display); font-variant-numeric: tabular-nums; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-        </button>
-        <a class="navbar-brand" href="#myPage">Me</a>
+/* ---------- HUD ---------- */
+#scene { position: fixed; inset: 0; width: 100%; height: 100%; display: block; z-index: 0; }
+.hud {
+  position: relative; z-index: 2;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px;
+  padding-block: calc(14px + env(safe-area-inset-top, 0px)) 14px;
+}
+.plate { display: flex; align-items: center; gap: 12px; margin-right: auto; }
+.plate .p1 {
+  font: 700 .8rem/1 var(--f-display); color: var(--night); background: var(--sap);
+  padding: 6px 8px; clip-path: var(--notch);
+}
+.plate b { font: 700 1.15rem/1 var(--f-display); letter-spacing: .02em; }
+.plate small { display: block; color: var(--dim); font-size: .78rem; line-height: 1.3; }
+.zones { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
+.zones button, .btn {
+  font: 600 .85rem/1 var(--f-display); color: var(--ink);
+  background: color-mix(in oklab, var(--moss) 70%, transparent);
+  border: 1px solid var(--line); clip-path: var(--notch);
+  padding: 9px 12px; cursor: pointer; white-space: nowrap;
+  transition: background-color 150ms var(--ease-out), color 150ms var(--ease-out), transform 150ms var(--ease-out);
+}
+.zones button:hover, .btn:hover { background: var(--line); }
+.zones button:active, .btn:active { transform: scale(.97); }
+.zones button[aria-current="step"] { background: var(--sap); color: var(--night); border-color: var(--sap); }
+.zones button .k { opacity: .55; margin-right: 6px; }
+.btn.ghost { background: transparent; }
+
+/* ---------- Console: panels + dialogue ---------- */
+.deck { position: relative; z-index: 2; max-width: 760px; margin: 0 auto; padding-block: 8px 48px; display: grid; gap: 28px; }
+.panel { display: grid; gap: 18px; align-content: start; scroll-margin-top: 24px; }
+.panel > header { display: grid; gap: 6px; }
+.panel > header p { color: var(--dim); }
+.dialogue { display: none; }
+
+/* Start */
+.title { font: 700 clamp(3rem, 9vw, 5.6rem)/.88 var(--f-display); letter-spacing: -.01em; }
+.title span { display: block; font-size: .36em; letter-spacing: .01em; color: var(--dim); margin-top: .5em; font-weight: 600; }
+.classline { font: 600 1.05rem/1.35 var(--f-display); color: var(--sap); }
+.pitch { max-width: 58ch; }
+
+/* Player */
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.stats div { background: var(--moss); padding: 12px 14px; display: grid; gap: 2px; }
+.stats .num { font-size: 1.6rem; font-weight: 700; color: var(--ink); line-height: 1; }
+.stats span { color: var(--dim); font-size: .82rem; line-height: 1.35; }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 6px 16px; }
+.kv dt { color: var(--dim); font-family: var(--f-display); }
+.kv dd { margin: 0; min-width: 0; }
+.passives { display: grid; gap: 8px; }
+.passives li { display: grid; grid-template-columns: 22px 1fr; gap: 8px; }
+.passives li::before { content: ""; width: 10px; height: 10px; margin-top: .5em; background: var(--leaf); transform: rotate(45deg); }
+
+/* Skills */
+.branch { display: grid; gap: 8px; }
+.branch h3 { display: flex; align-items: center; gap: 8px; }
+.branch h3 i { width: 10px; height: 10px; border-radius: 50%; background: var(--c); box-shadow: 0 0 10px var(--c); }
+.skill { display: grid; grid-template-columns: 7.5rem 1fr 2ch; gap: 10px; align-items: center; font-size: .9rem; }
+.skill .bar { height: 6px; background: color-mix(in oklab, var(--line) 70%, transparent); position: relative; overflow: hidden; }
+.skill .bar::after {
+  content: ""; position: absolute; inset: 0; background: var(--c);
+  transform-origin: left; transform: scaleX(var(--v));
+  transition: transform 700ms var(--ease-out);
+}
+.skill .num { color: var(--dim); text-align: right; }
+.skill.untracked .bar::after { background: repeating-linear-gradient(90deg, var(--c) 0 3px, transparent 3px 7px); opacity: .5; }
+.footnote { color: var(--dim); font-size: .82rem; }
+
+/* Quests */
+.quests { display: grid; gap: 10px; }
+.quest {
+  padding: 14px 16px; border: 1px solid var(--line); background: color-mix(in oklab, var(--moss) 80%, transparent);
+  display: grid; gap: 6px; clip-path: var(--notch);
+  transition: border-color 200ms var(--ease-out), background-color 200ms var(--ease-out);
+}
+.quest.main { border-left: 3px solid var(--sap); }
+.quest .tier { font: 600 .78rem/1 var(--f-display); color: var(--sap); }
+.quest.side .tier { color: var(--leaf); }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tags li { font: 600 .74rem/1 var(--f-display); color: var(--dim); border: 1px solid var(--line); padding: 4px 6px; }
+
+/* Party */
+.party { display: grid; gap: 10px; }
+.member {
+  display: grid; grid-template-columns: 44px 1fr; gap: 4px 14px; padding: 14px 16px;
+  border: 1px solid var(--line); background: color-mix(in oklab, var(--moss) 80%, transparent); clip-path: var(--notch);
+  cursor: pointer; text-align: left; color: inherit; font: inherit; width: 100%;
+  transition: border-color 200ms var(--ease-out), background-color 200ms var(--ease-out), transform 150ms var(--ease-out);
+}
+.member:hover { border-color: var(--c); }
+.member:active { transform: scale(.99); }
+.member.lit, .quest.lit { border-color: var(--c, var(--sap)); background: color-mix(in oklab, var(--c, var(--sap)) 12%, var(--moss)); }
+.member .sig { grid-row: span 3; width: 44px; height: 44px; background: var(--c); clip-path: var(--shape); }
+.member .h { font: 600 1.05rem/1.15 var(--f-display); display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.member .h small { font: 500 .8rem/1 var(--f-body); color: var(--dim); }
+.member .ability { font-size: .85rem; color: var(--c); font-family: var(--f-display); font-weight: 600; }
+.rules { border: 1px dashed var(--line); padding: 12px 14px; display: grid; gap: 4px; color: var(--dim); font-size: .9rem; }
+.rules b { color: var(--ink); font-family: var(--f-display); }
+
+/* Save */
+.links { display: grid; gap: 8px; }
+.links li { display: grid; grid-template-columns: 6rem 1fr; gap: 12px; align-items: baseline; }
+.links span { color: var(--dim); font-family: var(--f-display); }
+.links .copy { justify-self: start; margin-top: 6px; }
+.sign { color: var(--dim); font-size: .82rem; }
+
+/* ---------- Game mode (JS on) ---------- */
+body.game { height: 100dvh; overflow: hidden; }
+body.game .deck {
+  position: fixed; z-index: 2; margin: 0; max-width: none;
+  top: calc(76px + env(safe-area-inset-top, 0px)); bottom: max(20px, env(safe-area-inset-bottom, 0px));
+  right: max(20px, env(safe-area-inset-right, 0px)); width: var(--deck-w);
+  display: grid; grid-template-rows: minmax(0, 1fr) auto; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 0;
+}
+body.game .panels {
+  align-self: start; max-height: 100%;
+  overflow-y: auto; overscroll-behavior: contain; padding: 22px 22px 26px;
+  background: color-mix(in oklab, var(--night) 78%, transparent);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  border: 1px solid var(--line); clip-path: var(--notch);
+  scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+}
+body.game .panel { display: none; }
+body.game .panel.on { display: grid; animation: enter 320ms var(--ease-out); }
+@keyframes enter { from { opacity: 0; transform: translateY(10px); } }
+body.game .dialogue {
+  display: grid; grid-template-columns: 52px 1fr; gap: 6px 14px; align-items: start;
+  padding: 14px 16px; border: 1px solid var(--line); clip-path: var(--notch);
+  background: color-mix(in oklab, var(--moss) 88%, transparent);
+  -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+  cursor: pointer;
+}
+.portrait { grid-row: span 2; width: 52px; height: 52px; border-radius: 50%; background: var(--spectrum); position: relative; animation: iris 9s linear infinite; }
+.portrait::after { content: ""; position: absolute; inset: 30%; border-radius: 50%; background: var(--night); box-shadow: 0 0 0 3px color-mix(in oklab, var(--night) 40%, transparent); transition: inset 260ms var(--ease-out); }
+.dialogue.talking .portrait::after { inset: 36%; }
+@keyframes iris { to { rotate: 1turn; } }
+.speaker { font: 700 .9rem/1 var(--f-display); color: var(--ink); display: flex; gap: 10px; align-items: baseline; }
+.speaker small { font: 500 .78rem/1 var(--f-body); color: var(--dim); }
+.line { min-height: 4.8em; font-size: .95rem; }
+.line .caret { display: inline-block; width: .5em; height: 1em; background: var(--sap); vertical-align: -2px; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+.controls { grid-column: 1 / -1; display: flex; gap: 8px; justify-content: flex-end; align-items: center; }
+.controls .hint { margin-right: auto; color: var(--dim); font-size: .78rem; }
+
+/* Aperture intro: the iris opens on Ford's world */
+.aperture {
+  position: fixed; inset: 0; z-index: 5; pointer-events: none;
+  background: radial-gradient(circle at 34% 50%, transparent var(--r), #ffc46b calc(var(--r) + 1px), #b59bff calc(var(--r) + 5px), var(--night) calc(var(--r) + 9px));
+  animation: open 1100ms var(--ease-out) 250ms forwards;
+}
+@keyframes open { to { --r: 160vmax; } }
+body:not(.game) .aperture { display: none; }
+
+body.game.doc { overflow: auto; height: auto; }
+body.game.doc #scene { opacity: .22; }
+body.game.doc .deck { position: relative; inset: auto; width: auto; max-width: 760px; margin: 0 auto; display: block; padding-block: 8px 48px; }
+body.game.doc .panels { overflow: visible; background: none; backdrop-filter: none; -webkit-backdrop-filter: none; border: 0; clip-path: none; padding: 0; display: grid; gap: 44px; }
+body.game.doc .panel { display: grid; animation: none; }
+body.game.doc .dialogue, body.game.doc .zones { display: none; }
+
+@media (max-width: 820px) {
+  body.game .hud { padding-block: calc(10px + env(safe-area-inset-top, 0px)) 8px; gap: 8px; }
+  body.game .plate small { display: none; }
+  body.game .deck {
+    left: 0; right: 0; width: auto; top: auto; height: 60dvh; bottom: 0; gap: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+    padding-left: max(10px, env(safe-area-inset-left, 0px)); padding-right: max(10px, env(safe-area-inset-right, 0px));
+    padding-bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  }
+  body.game .dialogue { order: -1; grid-template-columns: 40px 1fr; padding: 10px 12px; }
+  body.game .portrait { width: 40px; height: 40px; }
+  body.game .line { min-height: 3.2em; font-size: .9rem; }
+  body.game .controls .hint { display: none; }
+  .aperture { background: radial-gradient(circle at 50% 20%, transparent var(--r), #ffc46b calc(var(--r) + 1px), #b59bff calc(var(--r) + 5px), var(--night) calc(var(--r) + 9px)); }
+  body.game .panels { padding: 16px 16px 22px; align-self: stretch; }
+  body.game #mode { padding: 7px 9px; font-size: .78rem; }
+  .skill { grid-template-columns: 6.2rem 1fr 2ch; }
+  .title { font-size: clamp(2.6rem, 14vw, 4rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition-duration: 1ms !important; }
+  .aperture { display: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-hidden="true"></canvas>
+<div class="aperture" aria-hidden="true"></div>
+
+<header class="hud">
+  <div class="plate">
+    <span class="p1">P1</span>
+    <div><b>FORD</b><small>Finance &amp; commerce engineer, party leader</small></div>
+  </div>
+  <nav class="zones" aria-label="Resume sections">
+    <button data-go="0"><span class="k">1</span>Start</button>
+    <button data-go="1"><span class="k">2</span>Player</button>
+    <button data-go="2"><span class="k">3</span>Skills</button>
+    <button data-go="3"><span class="k">4</span>Quests</button>
+    <button data-go="4"><span class="k">5</span>Party</button>
+    <button data-go="5"><span class="k">6</span>Save</button>
+  </nav>
+  <button class="btn ghost" id="mode" hidden>Plain resume</button>
+</header>
+
+<main class="deck">
+  <div class="panels" id="panels" tabindex="-1">
+
+    <section class="panel" id="start" data-zone="0">
+      <h1 class="title">Ford<span>Chissanupong Prom-on</span></h1>
+      <p class="classline">Full-stack engineer for finance and commerce systems. Leads a party of AI agents.</p>
+      <p class="pitch">I build the paths money takes at Opendurian: marketplace orders come in, bills go out, and every baht can be traced back to where it came from. My agents keep the memory, watch production overnight and write code in parallel. I make the calls.</p>
+    </section>
+
+    <section class="panel" id="player" data-zone="1">
+      <header><h2>Player</h2><p>Character sheet, counted from my Oracle's memory as of October 2026.</p></header>
+      <div class="stats">
+        <div><b class="num">172</b><span>lessons written down after real bugs and reviews</span></div>
+        <div><b class="num">578</b><span>work sessions with a written retrospective</span></div>
+        <div><b class="num">50</b><span>tasks handed to agents with a brief and evidence check</span></div>
+        <div><b class="num">7</b><span>agents in the party, each with its own role</span></div>
       </div>
-      <div class="collapse navbar-collapse" id="myNavbar">
-        <ul class="nav navbar-nav navbar-right">
-        <!--  <li><a href="#about">ABOUT</a></li>
-          <li><a href="#services">SERVICES</a></li>
-          <li><a href="#portfolio">PORTFOLIO</a></li>
-          <li><a href="#pricing">TEAM</a></li>  -->
-          <li><a href="#contact">CONTACT</a></li>
+      <dl class="kv">
+        <dt>Class</dt><dd>Full-stack engineer</dd>
+        <dt>Guild</dt><dd>Opendurian, finance and order platform</dd>
+        <dt>Origin</dt><dd>Software Engineering, University of Phayao</dd>
+        <dt>Region</dt><dd>Thailand</dd>
+        <dt>Languages</dt><dd>Thai, English</dd>
+      </dl>
+      <h3>Passive abilities</h3>
+      <ul class="passives">
+        <li>A test only counts after I've seen it fail.</li>
+        <li>Count the rows before claiming a search works.</li>
+        <li>Check the database engine before writing the spec.</li>
+        <li>Say what "done" was measured against.</li>
+        <li>Ask about scope before touching production data.</li>
+      </ul>
+      <p class="footnote">Each line is a real lesson title from my memory log, not a slogan.</p>
+    </section>
+
+    <section class="panel" id="skills" data-zone="2">
+      <header><h2>Skill tree</h2><p>I didn't rate myself. Each bar shows how many of my 172 written lessons involve that tool, so the long ones are where I've done the most hard work.</p></header>
+      <div class="branch" style="--c:#f2b544" data-branch="Commerce &amp; ERP">
+        <h3><i></i>Commerce &amp; ERP</h3>
+        <ul>
+          <li class="skill" data-n="16"><span>Shopee</span><span class="bar" style="--v:.94"></span><span class="num">16</span></li>
+          <li class="skill" data-n="13"><span>Odoo</span><span class="bar" style="--v:.76"></span><span class="num">13</span></li>
+          <li class="skill" data-n="9"><span>TikTok Shop</span><span class="bar" style="--v:.53"></span><span class="num">9</span></li>
+          <li class="skill" data-n="8"><span>ERPNext</span><span class="bar" style="--v:.47"></span><span class="num">8</span></li>
+          <li class="skill" data-n="5"><span>Shopify</span><span class="bar" style="--v:.29"></span><span class="num">5</span></li>
+          <li class="skill" data-n="2"><span>Lazada</span><span class="bar" style="--v:.12"></span><span class="num">2</span></li>
         </ul>
       </div>
-    </div>
-  </nav>
-  <div id="myCarousel" class="carousel slide text-center" data-ride="carousel">
-  <!-- Indicators -->
-  <ol class="carousel-indicators">
-    <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-    <li data-target="#myCarousel" data-slide-to="1"></li>
-    <li data-target="#myCarousel" data-slide-to="2"></li>
-  </ol>
+      <div class="branch" style="--c:#8cc49a" data-branch="Data &amp; queues">
+        <h3><i></i>Data &amp; queues</h3>
+        <ul>
+          <li class="skill" data-n="17"><span>MongoDB</span><span class="bar" style="--v:1"></span><span class="num">17</span></li>
+          <li class="skill" data-n="12"><span>RabbitMQ</span><span class="bar" style="--v:.71"></span><span class="num">12</span></li>
+          <li class="skill" data-n="9"><span>PostgreSQL</span><span class="bar" style="--v:.53"></span><span class="num">9</span></li>
+          <li class="skill" data-n="9"><span>Redis</span><span class="bar" style="--v:.53"></span><span class="num">9</span></li>
+          <li class="skill" data-n="5"><span>Celery</span><span class="bar" style="--v:.29"></span><span class="num">5</span></li>
+        </ul>
+      </div>
+      <div class="branch" style="--c:#7fd6ff" data-branch="Backend">
+        <h3><i></i>Backend</h3>
+        <ul>
+          <li class="skill" data-n="9"><span>Go</span><span class="bar" style="--v:.53"></span><span class="num">9</span></li>
+          <li class="skill" data-n="9"><span>Django</span><span class="bar" style="--v:.53"></span><span class="num">9</span></li>
+          <li class="skill" data-n="8"><span>Docker</span><span class="bar" style="--v:.47"></span><span class="num">8</span></li>
+          <li class="skill" data-n="8"><span>Webhooks</span><span class="bar" style="--v:.47"></span><span class="num">8</span></li>
+          <li class="skill" data-n="5"><span>Bun</span><span class="bar" style="--v:.29"></span><span class="num">5</span></li>
+          <li class="skill" data-n="4"><span>FastAPI</span><span class="bar" style="--v:.24"></span><span class="num">4</span></li>
+        </ul>
+      </div>
+      <div class="branch" style="--c:#a99bff" data-branch="AI &amp; agents">
+        <h3><i></i>AI &amp; agents</h3>
+        <ul>
+          <li class="skill" data-n="19"><span>Claude Code</span><span class="bar" style="--v:1"></span><span class="num">19</span></li>
+          <li class="skill" data-n="18"><span>Codex</span><span class="bar" style="--v:1"></span><span class="num">18</span></li>
+          <li class="skill" data-n="12"><span>MCP</span><span class="bar" style="--v:.71"></span><span class="num">12</span></li>
+          <li class="skill" data-n="7"><span>Herdr / maw</span><span class="bar" style="--v:.41"></span><span class="num">7</span></li>
+          <li class="skill" data-n="3"><span>Hermes</span><span class="bar" style="--v:.18"></span><span class="num">3</span></li>
+          <li class="skill" data-n="2"><span>Ollama</span><span class="bar" style="--v:.12"></span><span class="num">2</span></li>
+        </ul>
+      </div>
+      <div class="branch" style="--c:#ff7a8a" data-branch="Frontend">
+        <h3><i></i>Frontend</h3>
+        <ul>
+          <li class="skill" data-n="6"><span>TypeScript</span><span class="bar" style="--v:.35"></span><span class="num">6</span></li>
+          <li class="skill" data-n="5"><span>React</span><span class="bar" style="--v:.29"></span><span class="num">5</span></li>
+          <li class="skill untracked" data-n="3"><span>Nuxt</span><span class="bar" style="--v:.18"></span><span class="num">–</span></li>
+          <li class="skill" data-n="1"><span>Three.js</span><span class="bar" style="--v:.06"></span><span class="num">1</span></li>
+        </ul>
+      </div>
+      <p class="footnote">Counted by Jacob, my Oracle, on 20 Oct 2026. A dashed bar is in use but not in the lesson log yet. Three.js gets +1 for this page.</p>
+    </section>
 
-  <!-- Wrapper for slides -->
+    <section class="panel" id="quests" data-zone="3">
+      <header><h2>Quest log</h2><p>Main quests run in production. Side quests are things I build because I want them to exist.</p></header>
+      <ul class="quests">
+        <li class="quest main" data-quest="0">
+          <span class="tier">Main quest</span>
+          <h3>Finance Management System</h3>
+          <p>Billing, reconciliation and finance documents from draft to approval and signature, with an editable timeline so every change has a history. Every bill links back to the order it came from.</p>
+          <ul class="tags"><li>Billing</li><li>ERPNext</li><li>Odoo</li><li>Audit trail</li></ul>
+        </li>
+        <li class="quest main" data-quest="1">
+          <span class="tier">Main quest</span>
+          <h3>Marketplace order pipeline</h3>
+          <p>Orders from Shopee, TikTok Shop, Shopify and Lazada arrive through webhooks and queues and land in the ERP. Includes fast-delivery routing, cut-off rules and handling marketplace rate limits.</p>
+          <ul class="tags"><li>RabbitMQ</li><li>MongoDB</li><li>Odoo</li><li>Webhooks</li></ul>
+        </li>
+        <li class="quest main" data-quest="2">
+          <span class="tier">Main quest</span>
+          <h3>Product and stock sync</h3>
+          <p>One source of truth for product data and stock tags, shared by the order system and the ERP.</p>
+          <ul class="tags"><li>Data modelling</li><li>ERP</li></ul>
+        </li>
+        <li class="quest side" data-quest="3">
+          <span class="tier">Side quest</span>
+          <h3>ห้องสื่อ Studio</h3>
+          <p>A builder for illustrated worksheets for young kids: live A4 preview, answer keys, PDF rendering, and AI help that runs on a local model.</p>
+          <ul class="tags"><li>Nuxt</li><li>PDF</li><li>Ollama</li></ul>
+        </li>
+        <li class="quest side" data-quest="4">
+          <span class="tier">Side quest</span>
+          <h3>Iris Meetings</h3>
+          <p>Meet and Zoom calls are transcribed on my machine, summarised by Iris, and posted to Discord as notes with the full transcript.</p>
+          <ul class="tags"><li>Python stdlib</li><li>Local STT</li><li>Discord</li></ul>
+        </li>
+        <li class="quest side" data-quest="5">
+          <span class="tier">Side quest</span>
+          <h3>Oracle workflow</h3>
+          <p>A task record for my agent party: the brief, the pinned commit, each worker's git worktree, and the evidence review before anything counts as done.</p>
+          <ul class="tags"><li>Git worktrees</li><li>Bun</li><li>Herdr</li></ul>
+        </li>
+      </ul>
+    </section>
 
-  <div class="carousel-inner" role="listbox">
-    <div class="item active">
-        <div class="crop-height">
-      <img src="img/photo-1.jpg"  alt="Chicago" >
+    <section class="panel" id="party" data-zone="4">
+      <header><h2>Party</h2><p>I don't play solo. Select a member to see them in the world.</p></header>
+      <ul class="party">
+        <li><button class="member" data-agent="jacob" style="--c:#a99bff;--shape:polygon(50% 0,100% 100%,0 100%)">
+          <span class="sig"></span>
+          <span class="h">Jacob Oracle <small>Archivist and project manager</small></span>
+          <span class="d">My external brain. Keeps every session note and lesson, never deletes anything, and manages the dev squad's task queue.</span>
+          <span class="ability">Ability: Nothing is Deleted</span>
+        </button></li>
+        <li><button class="member" data-agent="iris" style="--c:#7fd6ff;--shape:circle(50%)">
+          <span class="sig" style="background:var(--spectrum)"></span>
+          <span class="h">Iris Oracle <small>Guide and dev companion</small></span>
+          <span class="d">Moves between repos with me and carries context from one to the next. Leads the durian squad and writes my meeting notes.</span>
+          <span class="ability">Ability: Aperture focus</span>
+        </button></li>
+        <li><button class="member" data-agent="reina" style="--c:#ff7a8a;--shape:polygon(30% 0,70% 0,100% 30%,100% 70%,70% 100%,30% 100%,0 70%,0 30%)">
+          <span class="sig"></span>
+          <span class="h">Reina 怜奈 <small>Night watch</small></span>
+          <span class="d">Runs on a Hermes gateway around the clock on Slack, Telegram and Discord. Flags new error patterns as they appear and sends a summary at 9 every morning.</span>
+          <span class="ability">Ability: Never logs off</span>
+        </button></li>
+        <li><button class="member" data-agent="squad" style="--c:#f2b544;--shape:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)">
+          <span class="sig"></span>
+          <span class="h">Durian squad <small>Coder, security, requirements analyst</small></span>
+          <span class="d">A specialist team for the finance backend. Iris leads them in the field and Jacob manages their queue.</span>
+          <span class="ability">Ability: Three-way review</span>
+        </button></li>
+        <li><button class="member" data-agent="codex" style="--c:#8cc49a;--shape:inset(8%)">
+          <span class="sig"></span>
+          <span class="h">Codex workers <small>Builders</small></span>
+          <span class="d">Each one gets its own git worktree and a written brief. A finished dispatch isn't finished work: Jacob checks the evidence first.</span>
+          <span class="ability">Ability: Parallel build</span>
+        </button></li>
+      </ul>
+      <div class="rules">
+        <b>Party rules</b>
+        <span>Agents show me options and patterns. I make the decisions.</span>
+        <span>A mirror doesn't pretend to be a person: anything an agent writes in public is signed.</span>
       </div>
-      <div class="carousel-caption">
-        <h4>"This moment is the best. I am so happy with the result!"<br><span>UP RDC</span></h4>
-      </div>
-    </div>
-    <div class="item">
-        <div class="crop-height">
-      <img src="img/photo-2.jpg"  alt="Chicago" >
-      </div>
-      <div class="carousel-caption">
-      <h4>"This is a high school friend."<br><span>They are the best friends I have ever had.</span></h4>
-    </div>
-    </div>
-    <div class="item">
-        <div class="crop-height">
-      <img src="img/photo-3.jpg"  alt="Chicago" >
-      </div>
-      <div class="carousel-caption">
+    </section>
 
-        <a href="https://seup.github.io/" class="btn btn-default" role="button">SE UP</a>
-      <h4>"I studied software engineering at university of phayao."<br><span>####==========####</span></h4>
-    </div>
-    </div>
+    <section class="panel" id="save" data-zone="5">
+      <header><h2>Save point</h2><p>Want to team up on a quest? Send a message.</p></header>
+      <ul class="links">
+        <li><span>GitHub</span><a href="https://github.com/ford-zii">github.com/ford-zii</a></li>
+        <li><span>Email</span><div><code id="email">shissanupong@outlook.com</code><br><button class="btn copy" id="copy" type="button">Copy email</button></div></li>
+        <li><span>Old save</span><a href="2018/">The 2018 version of this site</a></li>
+      </ul>
+      <p class="sign">🤖 Built by jacob-oracle for [Ford] → oracle. The 3D world is drawn in code with Three.js.</p>
+    </section>
+
   </div>
 
-
-  <!-- Left and right controls -->
-  <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
-</div>
-<div class="container">
-        <!-- Container (Contact Section) -->
-    <div id="contact" class="container-fluid bg-grey">
-      <h2 class="text-center">CONTACT</h2>
-      <div class="row">
-        <div class="col-sm-5">
-
-          <p><span class="glyphicon glyphicon-map-marker"></span> Phayao, Thailand</p>
-          <p><span class="glyphicon glyphicon-phone"></span> +66 865433510</p>
-          <p><span class="glyphicon glyphicon-envelope"></span> shissanupong@outlook.com</p>
-        </div>
-        <div class="col-sm-7 slideanim">
-          <div class="row">
-            <div class="col-sm-6 form-group">
-              <input class="form-control" id="name" name="name" placeholder="Name" type="text" required>
-            </div>
-            <div class="col-sm-6 form-group">
-              <input class="form-control" id="email" name="email" placeholder="Email" type="email" required>
-            </div>
-          </div>
-          <textarea class="form-control" id="comments" name="comments" placeholder="Comment" rows="5"></textarea><br>
-          <div class="row">
-            <div class="col-sm-12 form-group">
-              <button class="btn btn-default pull-right" type="submit">Send</button>
-            </div>
-          </div>
-        </div>
-      </div>
+  <div class="dialogue" id="dialogue" aria-label="Iris, your guide">
+    <span class="portrait" aria-hidden="true"></span>
+    <p class="speaker">Iris <small>guide</small></p>
+    <p class="line"><span id="typed" aria-hidden="true"></span><span class="caret" aria-hidden="true"></span><span class="sr" id="said" aria-live="polite"></span></p>
+    <div class="controls">
+      <span class="hint">← → or 1–6 to travel</span>
+      <button class="btn" id="back" type="button">Back</button>
+      <button class="btn" id="next" type="button">Next</button>
     </div>
+  </div>
+</main>
 
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
-    <footer class="container-fluid text-center">
-      <a href="#myPage" title="To Top">
-        <span class="glyphicon glyphicon-chevron-up"></span>
-      </a>
-      <p>Made By Chissanupong Prom-on : <a href="https://www.facebook.com/ford.zii1" title="Visit w3schools">Ford'zii</a></p>
-    </footer>
-    <script>
-  $(document).ready(function(){
-    // Add smooth scrolling to all links in navbar + footer link
-    $(".navbar a, footer a[href='#myPage']").on('click', function(event) {
-      // Make sure this.hash has a value before overriding default behavior
-      if (this.hash !== "") {
-        // Prevent default anchor click behavior
-        event.preventDefault();
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const HASH = ['start', 'player', 'skills', 'quests', 'party', 'save'];
 
-        // Store hash
-        var hash = this.hash;
+const LINES = [
+  "Hi, I'm Iris, Ford's dev companion. I carry context between his repos, so I'll carry you through his save file. Press Next or use the arrow keys to follow me.",
+  "This is Ford. He builds the money paths at Opendurian: orders in, bills out, every baht accounted for. Those stats come from his memory log, not a guess.",
+  "These are his skill branches. He didn't rate himself, Jacob counted. The brightest stars are the tools behind the most hard-won lessons.",
+  "His quest log. The gold tablets run in production right now. The green ones are side quests he built because he wanted them to exist.",
+  "Ford doesn't solo. Jacob keeps the memory, Reina keeps watch overnight, the durian squad and Codex build, and I keep things in focus. Ford still makes every call. Tap one of us.",
+  "Save point. If you want to start a co-op quest with Ford, his contacts are here. Thanks for walking the orchard with me."
+];
+const AGENT_LINES = {
+  jacob: "Jacob, my older brother. Named after Jacob's Ladder, the flower and the stairway. He's never deleted a note, he only grows new rings.",
+  iris: "That's me. An iris lets in just enough light to bring things into focus. I do the same with context.",
+  reina: "Reina, our little sister. She lives in the gateway, so she doesn't start fresh every session like Jacob and me. She's always on watch.",
+  squad: "The durian squad: coder, security and requirements analyst. Spiky on the outside, careful on the inside.",
+  codex: "Codex workers each build in their own worktree. Ford's rule is that a dispatch only counts once the evidence is checked."
+};
 
-        // Using jQuery's animate() method to add smooth page scroll
-        // The optional number (900) specifies the number of milliseconds it takes to scroll to the specified area
-        $('html, body').animate({
-          scrollTop: $(hash).offset().top
-        }, 900, function(){
+/* ---------------- Guide + zone state ---------------- */
+let zone = 0, typer = 0, full = '';
+const typed = $('#typed'), said = $('#said'), dlg = $('#dialogue');
+function say(text) {
+  full = text; said.textContent = text; clearInterval(typer);
+  if (reduced) { typed.textContent = text; return; }
+  let i = 0; typed.textContent = ''; dlg.classList.add('talking');
+  typer = setInterval(() => {
+    i += 2; typed.textContent = text.slice(0, i);
+    if (i >= text.length) { clearInterval(typer); dlg.classList.remove('talking'); }
+  }, 24);
+}
+const typing = () => typed.textContent.length < full.length;
+function finishTyping() { clearInterval(typer); typed.textContent = full; dlg.classList.remove('talking'); }
 
-          // Add hash (#) to URL when done scrolling (default click behavior)
-          window.location.hash = hash;
-        });
-      } // End if
+function go(n, { line } = {}) {
+  zone = (n + HASH.length) % HASH.length;
+  $$('.panel').forEach(p => p.classList.toggle('on', +p.dataset.zone === zone));
+  $$('.zones button').forEach(b => b.setAttribute('aria-current', +b.dataset.go === zone ? 'step' : 'false'));
+  $('#panels').scrollTop = 0;
+  $('#back').disabled = zone === 0;
+  $('#next').textContent = zone === HASH.length - 1 ? 'Start over' : 'Next';
+  say(line || LINES[zone]);
+  world?.fly(zone);
+  try { history.replaceState(null, '', '#' + HASH[zone]); } catch {}
+}
+function select(agent) {
+  $$('.member').forEach(m => m.classList.toggle('lit', m.dataset.agent === agent));
+  if (zone !== 4) go(4, { line: AGENT_LINES[agent] }); else say(AGENT_LINES[agent]);
+  $(`.member[data-agent="${agent}"]`)?.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
+  world?.pulse(agent);
+}
+
+/* ---------------- 3D world ---------------- */
+let world = null;
+try { world = buildWorld($('#scene')); } catch (e) { console.warn('3D world unavailable', e); }
+
+document.body.classList.add('game');
+$('#mode').hidden = false;
+$$('.zones button').forEach(b => b.addEventListener('click', () => go(+b.dataset.go)));
+$('#next').addEventListener('click', e => { e.stopPropagation(); typing() ? finishTyping() : go(zone + 1); });
+$('#back').addEventListener('click', e => { e.stopPropagation(); go(zone - 1); });
+dlg.addEventListener('click', () => typing() ? finishTyping() : go(zone + 1));
+$$('.member').forEach(m => m.addEventListener('click', () => select(m.dataset.agent)));
+$('#mode').addEventListener('click', () => {
+  const doc = document.body.classList.toggle('doc');
+  $('#mode').textContent = doc ? 'Game mode' : 'Plain resume';
+  world?.idle(doc);
+});
+$('#copy').addEventListener('click', async () => {
+  const btn = $('#copy');
+  try { await navigator.clipboard.writeText($('#email').textContent); btn.textContent = 'Email copied'; }
+  catch { getSelection().selectAllChildren($('#email')); btn.textContent = 'Selected, press Ctrl+C'; }
+  setTimeout(() => (btn.textContent = 'Copy email'), 2000);
+});
+addEventListener('keydown', e => {
+  if (document.body.classList.contains('doc') || e.target.closest('input,textarea')) return;
+  if (e.key === 'ArrowRight') go(zone + 1);
+  else if (e.key === 'ArrowLeft') go(zone - 1);
+  else if (/^[1-6]$/.test(e.key)) go(+e.key - 1);
+});
+go(Math.max(0, HASH.indexOf(location.hash.slice(1))));
+
+function buildWorld(canvas) {
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.05;
+
+  const NIGHT = 0x0b1714, SAP = 0xf2b544, LEAF = 0x8cc49a, PETAL = 0xa99bff, LANTERN = 0xff7a8a, SKY = 0x7fd6ff;
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(NIGHT);
+  scene.fog = new THREE.FogExp2(NIGHT, 0.028);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+
+  const camera = new THREE.PerspectiveCamera(42, 1, 0.1, 200);
+  scene.add(new THREE.HemisphereLight(0x9fd8c0, 0x0b1714, 0.6));
+  const key = new THREE.DirectionalLight(0xfff1d6, 1.4); key.position.set(6, 12, 8); scene.add(key);
+
+  const std = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: .55, metalness: .2, flatShading: true, ...o });
+  const glow = (color, k = 2.2) => new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: k, roughness: .4 });
+  const mesh = (g, m, ...pos) => { const x = new THREE.Mesh(g, m); x.position.set(...pos); return x; };
+
+  // ground
+  const ground = mesh(new THREE.CircleGeometry(80, 64), std(0x0f211b, { roughness: 1, metalness: 0 }), 0, 0, 0);
+  ground.rotation.x = -Math.PI / 2; scene.add(ground);
+  const grid = new THREE.PolarGridHelper(34, 12, 9, 96, 0x24453b, 0x1a332b); grid.position.y = .01; scene.add(grid);
+
+  // stations around the ring
+  const R = 17;
+  const at = a => new THREE.Vector3(Math.sin(a) * R, 0, Math.cos(a) * R);
+  const P = { skills: at(1.15), quests: at(2.45), party: at(-2.45), save: at(-1.15) };
+  const pickable = [];
+  const tickers = [];
+
+  // --- Player avatar on a pedestal (center)
+  const avatar = new THREE.Group(); scene.add(avatar);
+  avatar.add(mesh(new THREE.CylinderGeometry(2, 2.3, .4, 8), std(0x1b3029, { metalness: .6, roughness: .35 }), 0, .2, 0));
+  const ring = mesh(new THREE.TorusGeometry(2.08, .035, 8, 96), glow(SAP, 3), 0, .42, 0); ring.rotation.x = Math.PI / 2; avatar.add(ring);
+  const hero = new THREE.Group(); hero.position.y = .4; avatar.add(hero);
+  const suit = std(0x2c5a4b), skin = std(0xe2d2bd), trim = std(0xdfe8e2, { metalness: .5, roughness: .3 });
+  [-.2, .2].forEach(x => { hero.add(mesh(new THREE.CylinderGeometry(.13, .11, .9, 6), suit, x, .45, 0)); hero.add(mesh(new THREE.BoxGeometry(.26, .14, .4), trim, x, .07, .06)); });
+  const torso = mesh(new THREE.CylinderGeometry(.48, .36, 1, 6), suit, 0, 1.4, 0); hero.add(torso);
+  hero.add(mesh(new THREE.BoxGeometry(1.2, .22, .5), trim, 0, 1.86, 0));
+  [-.62, .62].forEach(x => hero.add(mesh(new THREE.CylinderGeometry(.1, .09, .9, 6), suit, x, 1.38, 0)));
+  const head = new THREE.Group(); head.position.y = 2.32; hero.add(head);
+  head.add(mesh(new THREE.IcosahedronGeometry(.34, 1), skin, 0, 0, 0));
+  head.add(mesh(new THREE.BoxGeometry(.56, .12, .14), glow(SAP, 2.6), 0, .04, .28));
+  const hair = mesh(new THREE.IcosahedronGeometry(.36, 1), std(0x1d2b26), 0, .12, -.06); hair.scale.set(1, .8, 1); head.add(hair);
+  const halo1 = mesh(new THREE.TorusGeometry(1.25, .012, 6, 96), glow(LEAF, 2), 0, 1.6, 0);
+  const halo2 = mesh(new THREE.TorusGeometry(1.45, .012, 6, 96), glow(SAP, 1.6), 0, 1.4, 0);
+  hero.add(halo1, halo2);
+  avatar.userData.zone = 1; pickable.push(avatar);
+  tickers.push(t => {
+    hero.position.y = .4 + Math.sin(t * 1.6) * .03;
+    halo1.rotation.set(1.2 + Math.sin(t * .5) * .2, t * .4, 0);
+    halo2.rotation.set(1.9, -t * .3, Math.cos(t * .4) * .2);
+    head.rotation.y += ((pointer.x * .6) - head.rotation.y) * .05;
+    head.rotation.x += ((-pointer.y * .25) - head.rotation.x) * .05;
+  });
+
+  // --- Skill constellation, read from the page's skill list
+  const skills = new THREE.Group(); skills.position.copy(P.skills); scene.add(skills);
+  skills.lookAt(0, 0, 0);
+  const branches = $$('.branch');
+  const linePts = [], nodes = [];
+  skills.add(mesh(new THREE.CylinderGeometry(.9, 1.1, .3, 6), std(0x1b3029), 0, .15, 0));
+  const root = new THREE.Vector3(0, .6, 0);
+  branches.forEach((b, bi) => {
+    const col = new THREE.Color(getComputedStyle(b).getPropertyValue('--c').trim());
+    const spread = (bi - (branches.length - 1) / 2) * .62;
+    let prev = root.clone();
+    $$('.skill', b).forEach((s, si) => {
+      const n = +s.dataset.n;
+      const p = new THREE.Vector3(Math.sin(spread) * (1 + si * .55), 1.2 + si * .72, -Math.cos(spread) * .6 * si * .3);
+      const node = mesh(new THREE.IcosahedronGeometry(.07 + n * .012, 0), glow(col, 1.2 + n * .09), p.x, p.y, p.z);
+      node.userData.phase = bi + si * .7; nodes.push(node); skills.add(node);
+      linePts.push(prev.x, prev.y, prev.z, p.x, p.y, p.z); prev = p;
     });
+  });
+  const lg = new THREE.BufferGeometry(); lg.setAttribute('position', new THREE.Float32BufferAttribute(linePts, 3));
+  skills.add(new THREE.LineSegments(lg, new THREE.LineBasicMaterial({ color: 0x5f8f80, transparent: true, opacity: .55 })));
+  tickers.push(t => nodes.forEach(n => n.scale.setScalar(1 + Math.sin(t * 2 + n.userData.phase) * .12)));
 
-    $(window).scroll(function() {
-      $(".slideanim").each(function(){
-        var pos = $(this).offset().top;
+  // --- Quest tablets
+  const quests = new THREE.Group(); quests.position.copy(P.quests); scene.add(quests); quests.lookAt(0, 0, 0);
+  $$('.quest').forEach((q, i, all) => {
+    const main = q.classList.contains('main');
+    const a = (i - (all.length - 1) / 2) * .42;
+    const tab = new THREE.Group();
+    tab.position.set(Math.sin(a) * 3.2, 1.6 + (main ? .35 : 0), -Math.cos(a) * 3.2 + 3.2);
+    tab.rotation.y = -a;
+    const box = new THREE.BoxGeometry(1.05, 1.6, .08);
+    tab.add(new THREE.Mesh(box, std(0x173a30, { metalness: .5, roughness: .25, transparent: true, opacity: .85 })));
+    tab.add(new THREE.LineSegments(new THREE.EdgesGeometry(box), new THREE.LineBasicMaterial({ color: main ? SAP : LEAF })));
+    tab.add(mesh(new THREE.BoxGeometry(.6, .05, .1), glow(main ? SAP : LEAF, 2), 0, .5, 0));
+    [.2, .02, -.16].forEach((y, k) => tab.add(mesh(new THREE.BoxGeometry(.75 - k * .12, .025, .09), std(0x5f8f80), 0, y, 0)));
+    tab.userData.quest = i; tab.userData.base = tab.position.y; quests.add(tab); pickable.push(tab);
+    tickers.push(t => { tab.position.y = tab.userData.base + Math.sin(t * 1.1 + i) * .08; });
+  });
 
-        var winTop = $(window).scrollTop();
-          if (pos < winTop + 600) {
-            $(this).addClass("slide");
-          }
-      });
+  // --- Party
+  const party = new THREE.Group(); party.position.copy(P.party); scene.add(party); party.lookAt(0, 0, 0);
+  const members = {};
+  const slot = (name, x, z) => { const g = new THREE.Group(); g.position.set(x, 0, z); g.userData.agent = name; party.add(g); members[name] = g; pickable.push(g); return g; };
+  const pad = g => g.add(mesh(new THREE.CylinderGeometry(.75, .85, .16, 6), std(0x1b3029, { metalness: .5 }), 0, .08, 0));
+
+  // Jacob: a ladder that grows like Polemonium, rungs spiralling to a violet five-petal flower
+  { const g = slot('jacob', -2.6, .6); pad(g);
+    const stem = std(0x4f7d5c);
+    g.add(mesh(new THREE.CylinderGeometry(.05, .08, 3.2, 6), stem, 0, 1.7, 0));
+    for (let i = 0; i < 9; i++) {
+      const rung = mesh(new THREE.BoxGeometry(.7, .05, .07), trim, 0, .5 + i * .3, 0); rung.rotation.y = i * .55; g.add(rung);
+      const leaf = mesh(new THREE.ConeGeometry(.07, .32, 4), std(LEAF), Math.cos(i * .55) * .42, .55 + i * .3, -Math.sin(i * .55) * .42);
+      leaf.rotation.z = Math.PI / 2 * (i % 2 ? 1 : -1); g.add(leaf);
+    }
+    const flower = new THREE.Group(); flower.position.y = 3.35; g.add(flower);
+    for (let i = 0; i < 5; i++) { const pt = mesh(new THREE.SphereGeometry(.17, 8, 6), glow(PETAL, 1.5), Math.cos(i * 1.2566) * .2, 0, Math.sin(i * 1.2566) * .2); pt.scale.set(1, .45, 1); flower.add(pt); }
+    flower.add(mesh(new THREE.SphereGeometry(.08, 8, 6), glow(SAP, 3), 0, .04, 0));
+    tickers.push(t => { flower.rotation.y = t * .5; flower.position.y = 3.35 + Math.sin(t * 1.3) * .05; });
+  }
+  // Reina: a paper lantern with a vermilion frame
+  { const g = slot('reina', 2.6, .6); pad(g);
+    const prof = []; for (let i = 0; i <= 10; i++) { const y = i / 10; prof.push(new THREE.Vector2(.12 + Math.sin(y * Math.PI) * .42, y * 1.1)); }
+    const lantern = new THREE.Group(); lantern.position.y = 1.5; g.add(lantern);
+    lantern.add(mesh(new THREE.LatheGeometry(prof, 12), glow(LANTERN, 1.6), 0, -.55, 0));
+    [-.58, .58].forEach(y => lantern.add(mesh(new THREE.CylinderGeometry(.16, .16, .08, 12), std(0x2a1414), 0, y, 0)));
+    lantern.add(mesh(new THREE.CylinderGeometry(.015, .015, .5, 4), std(0xd14b4b), 0, -.86, 0));
+    const arch = new THREE.Group(); g.add(arch);
+    [-.75, .75].forEach(x => arch.add(mesh(new THREE.CylinderGeometry(.05, .06, 2.6, 6), std(0xd14b4b), x, 1.3, .5)));
+    arch.add(mesh(new THREE.BoxGeometry(2, .1, .12), std(0x2a1414), 0, 2.62, .5));
+    arch.add(mesh(new THREE.BoxGeometry(1.7, .08, .1), std(0xd14b4b), 0, 2.35, .5));
+    const light = new THREE.PointLight(LANTERN, 3, 6); light.position.y = 1.5; g.add(light);
+    tickers.push(t => { lantern.rotation.z = Math.sin(t * .9) * .05; light.intensity = 2.6 + Math.sin(t * 7) * .15 + Math.sin(t * 13) * .1; });
+  }
+  // Durian squad: three spiky drones on orbit
+  { const g = slot('squad', -1.1, -1.6); pad(g);
+    const ico = new THREE.IcosahedronGeometry(.26, 0), spike = new THREE.ConeGeometry(.06, .2, 4);
+    const pos = ico.getAttribute('position');
+    const drones = [SAP, LEAF, 0xd8c26a].map((c, k) => {
+      const d = new THREE.Group(); d.add(new THREE.Mesh(ico, std(c, { roughness: .4 })));
+      const seen = new Set();
+      for (let i = 0; i < pos.count; i++) {
+        const v = new THREE.Vector3().fromBufferAttribute(pos, i); const id = v.toArray().map(n => n.toFixed(2)).join();
+        if (seen.has(id)) continue; seen.add(id);
+        const s = new THREE.Mesh(spike, std(c)); s.position.copy(v.clone().multiplyScalar(1.15));
+        s.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), v.clone().normalize()); d.add(s);
+      }
+      d.add(mesh(new THREE.SphereGeometry(.06, 8, 6), glow(SKY, 3), 0, 0, .27));
+      g.add(d); return d;
     });
-  })
-  </script>
+    tickers.push(t => drones.forEach((d, k) => {
+      const a = t * .8 + k * 2.094;
+      d.position.set(Math.cos(a) * .55, 1.2 + Math.sin(t * 2 + k) * .15, Math.sin(a) * .55);
+      d.rotation.set(t * .7 + k, t * .9, 0);
+    }));
+  }
+  // Codex workers: a small grid of build cubes that assemble and reset
+  { const g = slot('codex', 1.1, -1.6); pad(g);
+    const cubes = []; const geo = new THREE.BoxGeometry(.22, .22, .22);
+    for (let i = 0; i < 9; i++) { const c = new THREE.Mesh(geo, i % 4 ? std(0x2f6b56, { metalness: .4 }) : glow(LEAF, 1.6)); c.userData.home = new THREE.Vector3((i % 3 - 1) * .26, .4 + Math.floor(i / 3) * .26, 0); g.add(c); cubes.push(c); }
+    tickers.push(t => cubes.forEach((c, i) => {
+      const k = Math.min(1, Math.max(0, ((t * .5) % 3) - i * .09));
+      const e = 1 - Math.pow(1 - k, 3);
+      c.position.set(c.userData.home.x, c.userData.home.y + (1 - e) * 1.4, c.userData.home.z);
+      c.rotation.y = (1 - e) * 2;
+    }));
+  }
+
+  // --- Save crystal with light beam
+  const save = new THREE.Group(); save.position.copy(P.save); scene.add(save); save.userData.zone = 5; pickable.push(save);
+  const crystal = mesh(new THREE.OctahedronGeometry(.7, 0), glow(SAP, 1.4), 0, 1.8, 0); crystal.scale.y = 1.5; save.add(crystal);
+  save.add(mesh(new THREE.CylinderGeometry(1.1, 1.3, .3, 8), std(0x1b3029, { metalness: .6 }), 0, .15, 0));
+  const beam = mesh(new THREE.CylinderGeometry(.5, .9, 14, 24, 1, true), new THREE.MeshBasicMaterial({ color: SAP, transparent: true, opacity: .07, blending: THREE.AdditiveBlending, side: THREE.DoubleSide, depthWrite: false }), 0, 7, 0);
+  save.add(beam);
+  const sring = mesh(new THREE.TorusGeometry(1.2, .02, 6, 64), glow(SAP, 2), 0, 1.8, 0); save.add(sring);
+  tickers.push(t => { crystal.rotation.y = t * .8; crystal.position.y = 1.8 + Math.sin(t * 1.5) * .12; sring.rotation.set(Math.PI / 2 + Math.sin(t) * .3, 0, t * .5); });
+
+  // --- Sap motes drifting upward
+  const N = 900, mp = new Float32Array(N * 3), speed = new Float32Array(N);
+  for (let i = 0; i < N; i++) { const r = Math.sqrt(Math.random()) * 38, a = Math.random() * 6.283; mp.set([Math.cos(a) * r, Math.random() * 14, Math.sin(a) * r], i * 3); speed[i] = .004 + Math.random() * .012; }
+  const mg = new THREE.BufferGeometry(); mg.setAttribute('position', new THREE.BufferAttribute(mp, 3));
+  scene.add(new THREE.Points(mg, new THREE.PointsMaterial({ color: 0xf6d78f, size: .07, transparent: true, opacity: .75, blending: THREE.AdditiveBlending, depthWrite: false })));
+  tickers.push(() => { for (let i = 0; i < N; i++) { mp[i * 3 + 1] += speed[i]; if (mp[i * 3 + 1] > 14) mp[i * 3 + 1] = 0; } mg.attributes.position.needsUpdate = true; });
+
+  // --- Iris, the guide: spectral rings around a bright core, springs to each stop
+  const iris = new THREE.Group(); scene.add(iris);
+  iris.add(mesh(new THREE.SphereGeometry(.16, 16, 12), glow(0xffffff, 2.4), 0, 0, 0));
+  iris.add(mesh(new THREE.SphereGeometry(.07, 12, 8), std(0x0b1714), 0, 0, .13));
+  const irisRings = [0xff8fa3, 0xffc46b, 0xa6e38b, SKY, 0xb59bff].map((c, i) => { const r = mesh(new THREE.TorusGeometry(.26 + i * .07, .012, 6, 64), glow(c, 2), 0, 0, 0); iris.add(r); return r; });
+  const irisLight = new THREE.PointLight(0xcfe8ff, 2, 5); iris.add(irisLight);
+  const irisVel = new THREE.Vector3(), irisTarget = new THREE.Vector3(0, 3, 3);
+  iris.position.copy(irisTarget);
+  tickers.push(t => {
+    irisRings.forEach((r, i) => r.rotation.set(t * (.4 + i * .13), t * (.3 - i * .09), i));
+    irisVel.addScaledVector(irisTarget.clone().sub(iris.position), .012).multiplyScalar(.9);
+    iris.position.add(irisVel);
+    iris.position.y += Math.sin(t * 2.2) * .004;
+    iris.lookAt(camera.position);
+  });
+
+  // --- Camera stops
+  const out = p => p.clone().normalize();
+  const stop = (p, dist, h, lookY) => ({ pos: p.clone().add(out(p).multiplyScalar(dist)).setY(h), look: p.clone().setY(lookY) });
+  const STOPS = [
+    { pos: new THREE.Vector3(0, 12, 32), look: new THREE.Vector3(0, 1.5, 0) },
+    { pos: new THREE.Vector3(0, 2.6, 7), look: new THREE.Vector3(0, 1.7, 0) },
+    stop(P.skills, 8, 3.6, 2.6),
+    stop(P.quests, 8.5, 3.4, 1.7),
+    stop(P.party, 10.5, 4.2, 1.5),
+    stop(P.save, 7.5, 3.2, 2.2),
+  ];
+  const cur = { pos: STOPS[0].pos.clone(), look: STOPS[0].look.clone() };
+  let tween = null;
+  const easeInOut = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  function fly(z) {
+    const s = STOPS[z], far = innerWidth > 820 ? 1 : 1.7;
+    const to = { look: s.look, pos: s.look.clone().add(s.pos.clone().sub(s.look).multiplyScalar(far)) };
+    const right = new THREE.Vector3().subVectors(to.look, to.pos).cross(new THREE.Vector3(0, 1, 0)).normalize();
+    irisTarget.copy(to.look).addScaledVector(right, z === 0 ? 2.5 : 1.7).add(new THREE.Vector3(0, z === 0 ? 3 : 1.1, 0)).lerp(to.pos, z === 0 ? .55 : .3);
+    if (reduced) { cur.pos.copy(to.pos); cur.look.copy(to.look); iris.position.copy(irisTarget); return; }
+    tween = { from: { pos: cur.pos.clone(), look: cur.look.clone() }, to, t0: performance.now(), dur: 1500 };
+  }
+
+  // pulse a party member when selected
+  let pulsed = null, pulseT = 0;
+  function pulse(name) { pulsed = members[name]; pulseT = performance.now(); }
+  tickers.push(() => {
+    Object.values(members).forEach(m => { const k = m === pulsed ? Math.max(0, 1 - (performance.now() - pulseT) / 700) : 0; m.scale.setScalar(1 + Math.sin(k * Math.PI) * .12); });
+  });
+
+  // --- Post: bloom makes the emissive bits glow
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloom = new UnrealBloomPass(new THREE.Vector2(1, 1), .75, .55, .82);
+  composer.addPass(bloom);
+  composer.addPass(new OutputPass());
+
+  function resize() {
+    const w = innerWidth, h = innerHeight;
+    renderer.setSize(w, h, false); composer.setSize(w, h); bloom.setSize(w, h);
+    camera.aspect = w / h;
+    const deck = $('.deck').getBoundingClientRect();
+    const doc = document.body.classList.contains('doc');
+    const wide = w > 820;
+    camera.setViewOffset(w, h, !doc && wide ? deck.width / 2 : 0, !doc && !wide ? (h - deck.top) / 2 : 0, w, h);
+    camera.fov = wide ? 42 : 50;
+    bloom.strength = wide ? .75 : .5;
+    camera.updateProjectionMatrix();
+  }
+  addEventListener('resize', resize); resize();
+
+  // --- Pointer: parallax, hover, pick
+  const pointer = new THREE.Vector2(), ray = new THREE.Raycaster();
+  const owner = o => { while (o && o.userData.agent === undefined && o.userData.quest === undefined && o.userData.zone === undefined) o = o.parent; return o; };
+  const hit = e => { pointer.set(e.clientX / innerWidth * 2 - 1, -(e.clientY / innerHeight) * 2 + 1); ray.setFromCamera(pointer, camera); const h = ray.intersectObjects(pickable, true)[0]; return h && owner(h.object); };
+  canvas.addEventListener('pointermove', e => { canvas.style.cursor = hit(e) ? 'pointer' : 'default'; });
+  canvas.addEventListener('click', e => {
+    const o = hit(e); if (!o) return;
+    if (o.userData.agent) select(o.userData.agent);
+    else if (o.userData.quest !== undefined) {
+      if (zone !== 3) go(3);
+      const card = $$('.quest')[o.userData.quest];
+      $$('.quest').forEach(q => q.classList.toggle('lit', q === card));
+      card.scrollIntoView({ block: 'nearest', behavior: reduced ? 'auto' : 'smooth' });
+    } else go(o.userData.zone);
+  });
+
+  let paused = false;
+  const clock = new THREE.Clock();
+  const par = new THREE.Vector3();
+  function frame() {
+    requestAnimationFrame(frame);
+    if (paused || document.hidden) return;
+    const t = clock.getElapsedTime();
+    if (tween) {
+      const k = Math.min(1, (performance.now() - tween.t0) / tween.dur), e = easeInOut(k);
+      cur.pos.lerpVectors(tween.from.pos, tween.to.pos, e).y += Math.sin(Math.PI * e) * 3.5;
+      cur.look.lerpVectors(tween.from.look, tween.to.look, e);
+      if (k === 1) tween = null;
+    }
+    if (!reduced) par.lerp(new THREE.Vector3(pointer.x * .6, pointer.y * .35, 0), .04);
+    camera.position.copy(cur.pos).add(par);
+    camera.lookAt(cur.look);
+    if (!reduced) tickers.forEach(f => f(t)); else if (t < .1) tickers.forEach(f => f(0));
+    composer.render();
+  }
+  frame();
+  return { fly, pulse, idle: d => { requestAnimationFrame(resize); } };
+}
+</script>
 </body>
 </html>
